@@ -10,6 +10,7 @@ function ActiveComponent({ isActive, setIsActive, children, ...rest }) {
 
   useEvent(
     (event) => {
+      console.log('events')
       if (isActive && !(ref.current && ref.current.contains(event.target)))
         setIsActive(false);
     },

@@ -1,15 +1,25 @@
-/**
- * @jest-environment jsdom
- */
-
 import assert from 'assert';
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import ReactDOM from 'react-dom'
 import { Active, ActiveBoundary } from 'react-dom-outside';
 import { EventProvider } from 'react-dom-event';
 
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
 describe('react-dom', function () {
-  it('Active', function () {
+  let container: HTMLDivElement | null = null;
+  beforeEach(() => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+  });
+
+  afterEach(() => {
+    ReactDOM.unmountComponentAtNode(container);
+    container.remove();
+    container = null;
+  });
+
+  it('Active', async function () {
     type ComponentProps = {
       isActive?: boolean | undefined;
       setIsActive?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -33,27 +43,30 @@ describe('react-dom', function () {
 
     let clickValue;
     const onClick = (x) => (clickValue = x);
-    const { container } = render(
+    ReactDOM.render(
       <React.Fragment>
         <EventProvider>
           <Active>
             <Component onClick={onClick} />
           </Active>
-          <button id="outside"></button>
         </EventProvider>
+        <button id="outside"/>
       </React.Fragment>,
-    );
+    container);
+    await sleep(1); // wait for useEffect to resolve
     assert.equal(clickValue, undefined);
 
     // inside
     clickValue = undefined;
     assert.equal(container.querySelector('#text').innerHTML, 'not active');
-    fireEvent.click(container.querySelector('#click'));
+    (container.querySelector('#click') as HTMLElement).click();
+    await sleep(1); // wait for useEffect to resolve
     assert.ok(clickValue.target);
     assert.equal(container.querySelector('#text').innerHTML, 'active');
 
     // outside
-    fireEvent.click(container.querySelector('#outside'));
+    (container.querySelector('#outside') as HTMLElement).click();
+    await sleep(1); // wait for useEffect to resolve
     assert.equal(container.querySelector('#text').innerHTML, 'not active');
   });
 });
