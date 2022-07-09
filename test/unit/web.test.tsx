@@ -4,14 +4,29 @@
 
 import assert from 'assert';
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import ReactDOM from 'react-dom';
 
 import { View, Text } from 'react-native-web';
 import { Active, ActiveBoundary } from 'react-dom-outside';
 import { EventProvider } from 'react-dom-event';
+import findByTestID from '../lib/findByTestID';
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 describe('react-native-web', function () {
-  it('inside -> outside', async function () {
+  let container: HTMLDivElement | null = null;
+  beforeEach(() => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+  });
+
+  afterEach(() => {
+    ReactDOM.unmountComponentAtNode(container);
+    container.remove();
+    container = null;
+  });
+
+  it('Active', async function () {
     type ComponentProps = {
       isActive?: boolean | undefined;
       setIsActive?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -21,9 +36,7 @@ describe('react-native-web', function () {
     const Component = ({ isActive, setIsActive, onClick }: ComponentProps) => {
       return (
         <View testID="component">
-          <View testID="text">
-            <Text>{isActive ? 'active' : 'not active'}</Text>
-          </View>
+          <Text testID="text">{isActive ? 'active' : 'not active'}</Text>
           <View
             testID="click"
             onClick={(event) => {
@@ -37,33 +50,30 @@ describe('react-native-web', function () {
 
     let clickValue;
     const onClick = (x) => (clickValue = x);
-    const { findByTestId } = render(
+    ReactDOM.render(
       <React.Fragment>
         <EventProvider>
           <Active>
             <Component onClick={onClick} />
           </Active>
-          <View testID="outside"></View>
         </EventProvider>
+        <View testID="outside"/>
       </React.Fragment>,
-    );
+    container);
+    await sleep(1); // wait for useEffect to resolve
     assert.equal(clickValue, undefined);
-
+    
     // inside
     clickValue = undefined;
-    assert.equal(
-      (await findByTestId('text')).children[0].innerHTML,
-      'not active',
-    );
-    fireEvent.click(await findByTestId('click'));
+    assert.equal(findByTestID(container, 'text').innerHTML, 'not active');
+    (findByTestID(container, 'click') as HTMLElement).click();
+    await sleep(1); // wait for useEffect to resolve
     assert.ok(clickValue.target);
-    assert.equal((await findByTestId('text')).children[0].innerHTML, 'active');
+    assert.equal(findByTestID(container, 'text').innerHTML, 'active');
 
     // outside
-    fireEvent.click(await findByTestId('outside'));
-    assert.equal(
-      (await findByTestId('text')).children[0].innerHTML,
-      'not active',
-    );
+    (findByTestID(container, 'outside') as HTMLElement).click();
+    await sleep(1); // wait for useEffect to resolve
+    assert.equal(findByTestID(container, 'text').innerHTML, 'not active');
   });
 });
