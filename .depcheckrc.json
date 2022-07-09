@@ -4,6 +4,8 @@
     "react-dom-outside",
     "@typescript-eslint/*",
     "eslint-*",
-    "jsdom"
+    "jsdom",
+    "react",
+    "react-*"
   ]
 }

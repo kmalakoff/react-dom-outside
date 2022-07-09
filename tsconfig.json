@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "lib": ["es2015", "dom"],
-    "types": ["jest", "node", "react"],
+    "types": ["mocha", "node", "react"],
     "target": "es2020",
     "module": "esnext",
     "moduleResolution": "node",
