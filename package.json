@@ -47,6 +47,7 @@
     "version": "tsds version"
   },
   "devDependencies": {
+    "@types/mocha": "^9.1.1",
     "@types/react": "18.0.15",
     "@types/react-dom": "^18.0.6",
     "cross-env": "^7.0.3",
