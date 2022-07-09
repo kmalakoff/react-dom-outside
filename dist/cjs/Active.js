@@ -78,7 +78,9 @@ function ActiveComponent(_param) {
     ]);
     var ref = _react.default.useRef(null);
     (0, _reactDomEvent).useEvent(function(event) {
-        if (isActive && !(ref.current && ref.current.contains(event.target))) setIsActive(false);
+        if (!isActive) return;
+        if (ref.current && ref.current.contains(event.target)) return;
+        setIsActive(false);
     }, [
         isActive,
         setIsActive

@@ -1,20 +1,28 @@
 import assert from 'assert';
 import React from 'react';
-import ReactDOM from 'react-dom'
+import ReactDOM from 'react-dom';
+import {createRoot, Root} from 'react-dom/client';
+
 import { Active, ActiveBoundary } from 'react-dom-outside';
 import { EventProvider } from 'react-dom-event';
+import { useRef } from 'react-ref-boundary';
 
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+function sleep(ms) {
+  return new Promise(function(resolve) { setTimeout(resolve, ms) });
+}
 
 describe('react-dom', function () {
   let container: HTMLDivElement | null = null;
-  beforeEach(() => {
-    container = document.createElement("div");
+  let root: Root | null = null;
+  beforeEach(function () {
+    container = document.createElement('div');
     document.body.appendChild(container);
+    root = createRoot(container)
   });
 
-  afterEach(() => {
-    ReactDOM.unmountComponentAtNode(container);
+  afterEach(function () {
+    root.unmount();
+    root = null;
     container.remove();
     container = null;
   });
@@ -23,45 +31,92 @@ describe('react-dom', function () {
     type ComponentProps = {
       isActive?: boolean | undefined;
       setIsActive?: React.Dispatch<React.SetStateAction<boolean>>;
-      onClick: React.MouseEventHandler<HTMLButtonElement>;
     };
 
-    const Component = ({ isActive, setIsActive, onClick }: ComponentProps) => {
+    function Component({ isActive, setIsActive }: ComponentProps) {
       return (
-        <div id="component">
+        <div>
           <div id="text">{isActive ? 'active' : 'not active'}</div>
-          <button
-            id="click"
-            onClick={(event) => {
-              onClick(event);
-              setIsActive(!isActive);
-            }}
-          />
+          <button id="toggle" onClick={function () { setIsActive(!isActive) }} />
         </div>
       );
     };
 
-    let clickValue;
-    const onClick = (x) => (clickValue = x);
-    ReactDOM.render(
+    root.render(
       <React.Fragment>
         <EventProvider>
           <Active>
-            <Component onClick={onClick} />
+            <Component />
           </Active>
         </EventProvider>
-        <button id="outside"/>
-      </React.Fragment>,
-    container);
+        <button id="outside" />
+      </React.Fragment>
+    );
     await sleep(1); // wait for useEffect to resolve
-    assert.equal(clickValue, undefined);
 
     // inside
-    clickValue = undefined;
     assert.equal(container.querySelector('#text').innerHTML, 'not active');
-    (container.querySelector('#click') as HTMLElement).click();
+    (container.querySelector('#toggle') as HTMLElement).click();
     await sleep(1); // wait for useEffect to resolve
-    assert.ok(clickValue.target);
+    assert.equal(container.querySelector('#text').innerHTML, 'active');
+
+    // outside
+    (container.querySelector('#outside') as HTMLElement).click();
+    await sleep(1); // wait for useEffect to resolve
+    assert.equal(container.querySelector('#text').innerHTML, 'not active');
+  });
+
+  it('ActiveBoundary', async function () {
+    type ComponentProps = {
+      isActive?: boolean | undefined;
+      setIsActive?: React.Dispatch<React.SetStateAction<boolean>>;
+    };
+
+    function PortalComponent() {
+      const ref = useRef(null);
+      const el = React.useRef(document.createElement('div'));
+      React.useEffect(function () {
+        container.appendChild(el.current);
+      });
+      return ReactDOM.createPortal(
+        <button ref={ref} id="portal-click" onClick={function (event) {
+          event.stopPropagation();
+        }}/>,
+        el.current,
+      );
+    };
+
+    function Component({ isActive, setIsActive }: ComponentProps) {
+      return (
+        <div>
+          <div id="text">{isActive ? 'active' : 'not active'}</div>
+          <button id="toggle" onClick={function () { setIsActive(!isActive)}} />
+          <PortalComponent />
+        </div>
+      );
+    };
+
+    root.render(
+      <React.Fragment>
+        <EventProvider>
+          <ActiveBoundary>
+            <Component />
+          </ActiveBoundary>
+        </EventProvider>
+        <button id="outside" onClick={function (event) { event.stopPropagation() }}/>
+      </React.Fragment>
+    );
+    await sleep(1); // wait for useEffect to resolve
+
+    // inside
+    assert.equal(container.querySelector('#text').innerHTML, 'not active');
+    (container.querySelector('#toggle') as HTMLElement).click();
+    await sleep(1); // wait for useEffect to resolve
+    assert.equal(container.querySelector('#text').innerHTML, 'active');
+
+    // portal
+    (container.querySelector('#portal-click') as HTMLElement).click();
+    await sleep(1); // wait for useEffect to resolve
     assert.equal(container.querySelector('#text').innerHTML, 'active');
 
     // outside

@@ -5,23 +5,29 @@
 import assert from 'assert';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {createRoot, Root} from 'react-dom/client';
 
 import { View, Text } from 'react-native-web';
 import { Active, ActiveBoundary } from 'react-dom-outside';
 import { EventProvider } from 'react-dom-event';
 import findByTestID from '../lib/findByTestID';
 
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+function sleep(ms) {
+  return new Promise(function(resolve) { setTimeout(resolve, ms) });
+}
 
 describe('react-native-web', function () {
   let container: HTMLDivElement | null = null;
-  beforeEach(() => {
-    container = document.createElement("div");
+  let root: Root | null = null;
+  beforeEach(function () {
+    container = document.createElement('div');
     document.body.appendChild(container);
+    root = createRoot(container)
   });
 
-  afterEach(() => {
-    ReactDOM.unmountComponentAtNode(container);
+  afterEach(function () {
+    root.unmount();
+    root = null;
     container.remove();
     container = null;
   });
@@ -30,45 +36,33 @@ describe('react-native-web', function () {
     type ComponentProps = {
       isActive?: boolean | undefined;
       setIsActive?: React.Dispatch<React.SetStateAction<boolean>>;
-      onClick: React.MouseEventHandler<HTMLElement>;
     };
 
-    const Component = ({ isActive, setIsActive, onClick }: ComponentProps) => {
+    function Component({ isActive, setIsActive }: ComponentProps) {
       return (
-        <View testID="component">
+        <View>
           <Text testID="text">{isActive ? 'active' : 'not active'}</Text>
-          <View
-            testID="click"
-            onClick={(event) => {
-              onClick(event);
-              setIsActive(!isActive);
-            }}
-          />
+          <View testID="toggle" onClick={function () {setIsActive(!isActive)}} />
         </View>
       );
     };
 
-    let clickValue;
-    const onClick = (x) => (clickValue = x);
-    ReactDOM.render(
+    root.render(
       <React.Fragment>
         <EventProvider>
           <Active>
-            <Component onClick={onClick} />
+            <Component />
           </Active>
         </EventProvider>
-        <View testID="outside"/>
-      </React.Fragment>,
-    container);
+        <View testID="outside" />
+      </React.Fragment>
+    );
     await sleep(1); // wait for useEffect to resolve
-    assert.equal(clickValue, undefined);
-    
+
     // inside
-    clickValue = undefined;
     assert.equal(findByTestID(container, 'text').innerHTML, 'not active');
-    (findByTestID(container, 'click') as HTMLElement).click();
+    (findByTestID(container, 'toggle') as HTMLElement).click();
     await sleep(1); // wait for useEffect to resolve
-    assert.ok(clickValue.target);
     assert.equal(findByTestID(container, 'text').innerHTML, 'active');
 
     // outside

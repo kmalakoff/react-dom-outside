@@ -21,7 +21,12 @@ function ActiveComponent({ isActive , setIsActive , children , ...rest }) {
     const ref = useRef(null);
     const boundary = useBoundary();
     useEvent((event)=>{
-        if (isActive && !boundary.refs.some((x)=>x.current && x.current.contains(event.target))) setIsActive(false);
+        if (!isActive) return;
+        for(let i = 0; i < boundary.refs.length; i++){
+            const x = boundary.refs[i];
+            if (x.current && x.current.contains(event.target)) return;
+        }
+        setIsActive(false);
     }, [
         isActive,
         setIsActive
@@ -33,7 +38,9 @@ function ActiveComponent({ isActive , setIsActive , children , ...rest }) {
     }, rest), children);
 }
 export default function ActiveBoundaryNative({ children , ...rest }) {
-    const [isActive, setIsActive] = React.useState(false);
+    const state = React.useState(false);
+    const isActive = state[0];
+    const setIsActive = state[1];
     const Component = isActive ? ActiveComponent : ActiveBase;
     return /*#__PURE__*/ React.createElement(BoundaryProvider, null, /*#__PURE__*/ React.createElement(Component, _extends({}, rest, {
         isActive: isActive,

@@ -19,7 +19,9 @@ import ActiveBase from './lib/ActiveBase.mjs';
 function ActiveComponent({ isActive , setIsActive , children , ...rest }) {
     const ref = React.useRef(null);
     useEvent((event)=>{
-        if (isActive && !(ref.current && ref.current.contains(event.target))) setIsActive(false);
+        if (!isActive) return;
+        if (ref.current && ref.current.contains(event.target)) return;
+        setIsActive(false);
     }, [
         isActive,
         setIsActive
