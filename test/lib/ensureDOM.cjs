@@ -7,5 +7,5 @@
   global.document = dom.window.document;
   global.navigator = dom.window.navigator;
   global.ShadowRoot = dom.window.ShadowRoot;
-  global.ResizeObserver = dom.window.ResizeObserver;  
+  global.ResizeObserver = dom.window.ResizeObserver;
 })();

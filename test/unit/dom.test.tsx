@@ -1,14 +1,16 @@
 import assert from 'assert';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {createRoot, Root} from 'react-dom/client';
+import { createRoot, Root } from 'react-dom/client';
 
 import { Active, ActiveBoundary } from 'react-dom-outside';
 import { EventProvider } from 'react-dom-event';
 import { useRef } from 'react-ref-boundary';
 
 function sleep(ms) {
-  return new Promise(function(resolve) { setTimeout(resolve, ms) });
+  return new Promise(function (resolve) {
+    setTimeout(resolve, ms);
+  });
 }
 
 describe('react-dom', function () {
@@ -17,7 +19,7 @@ describe('react-dom', function () {
   beforeEach(function () {
     container = document.createElement('div');
     document.body.appendChild(container);
-    root = createRoot(container)
+    root = createRoot(container);
   });
 
   afterEach(function () {
@@ -33,14 +35,22 @@ describe('react-dom', function () {
       setIsActive?: React.Dispatch<React.SetStateAction<boolean>>;
     };
 
-    function Component({ isActive, setIsActive }: ComponentProps) {
+    const Component = React.forwardRef(function (
+      { isActive, setIsActive }: ComponentProps,
+      ref: React.RefObject<HTMLDivElement>,
+    ) {
       return (
-        <div>
+        <div ref={ref}>
           <div id="text">{isActive ? 'active' : 'not active'}</div>
-          <button id="toggle" onClick={function () { setIsActive(!isActive) }} />
+          <button
+            id="toggle"
+            onClick={function () {
+              setIsActive(!isActive);
+            }}
+          />
         </div>
       );
-    };
+    });
 
     root.render(
       <React.Fragment>
@@ -50,19 +60,19 @@ describe('react-dom', function () {
           </Active>
         </EventProvider>
         <button id="outside" />
-      </React.Fragment>
+      </React.Fragment>,
     );
-    await sleep(1); // wait for useEffect to resolve
+    await sleep(5); // wait for useEffect to resolve
 
     // inside
     assert.equal(container.querySelector('#text').innerHTML, 'not active');
     (container.querySelector('#toggle') as HTMLElement).click();
-    await sleep(1); // wait for useEffect to resolve
+    await sleep(5); // wait for useEffect to resolve
     assert.equal(container.querySelector('#text').innerHTML, 'active');
 
     // outside
     (container.querySelector('#outside') as HTMLElement).click();
-    await sleep(1); // wait for useEffect to resolve
+    await sleep(5); // wait for useEffect to resolve
     assert.equal(container.querySelector('#text').innerHTML, 'not active');
   });
 
@@ -79,22 +89,34 @@ describe('react-dom', function () {
         container.appendChild(el.current);
       });
       return ReactDOM.createPortal(
-        <button ref={ref} id="portal-click" onClick={function (event) {
-          event.stopPropagation();
-        }}/>,
+        <button
+          ref={ref}
+          id="portal-click"
+          onClick={function (event) {
+            event.stopPropagation();
+          }}
+        />,
         el.current,
       );
-    };
+    }
 
-    function Component({ isActive, setIsActive }: ComponentProps) {
+    const Component = React.forwardRef(function (
+      { isActive, setIsActive }: ComponentProps,
+      ref: React.RefObject<HTMLDivElement>,
+    ) {
       return (
-        <div>
+        <div ref={ref}>
           <div id="text">{isActive ? 'active' : 'not active'}</div>
-          <button id="toggle" onClick={function () { setIsActive(!isActive)}} />
+          <button
+            id="toggle"
+            onClick={function () {
+              setIsActive(!isActive);
+            }}
+          />
           <PortalComponent />
         </div>
       );
-    };
+    });
 
     root.render(
       <React.Fragment>
@@ -103,25 +125,30 @@ describe('react-dom', function () {
             <Component />
           </ActiveBoundary>
         </EventProvider>
-        <button id="outside" onClick={function (event) { event.stopPropagation() }}/>
-      </React.Fragment>
+        <button
+          id="outside"
+          onClick={function (event) {
+            event.stopPropagation();
+          }}
+        />
+      </React.Fragment>,
     );
-    await sleep(1); // wait for useEffect to resolve
+    await sleep(5); // wait for useEffect to resolve
 
     // inside
     assert.equal(container.querySelector('#text').innerHTML, 'not active');
     (container.querySelector('#toggle') as HTMLElement).click();
-    await sleep(1); // wait for useEffect to resolve
+    await sleep(5); // wait for useEffect to resolve
     assert.equal(container.querySelector('#text').innerHTML, 'active');
 
     // portal
     (container.querySelector('#portal-click') as HTMLElement).click();
-    await sleep(1); // wait for useEffect to resolve
+    await sleep(5); // wait for useEffect to resolve
     assert.equal(container.querySelector('#text').innerHTML, 'active');
 
     // outside
     (container.querySelector('#outside') as HTMLElement).click();
-    await sleep(1); // wait for useEffect to resolve
+    await sleep(5); // wait for useEffect to resolve
     assert.equal(container.querySelector('#text').innerHTML, 'not active');
   });
 });
