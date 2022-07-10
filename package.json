@@ -1,13 +1,14 @@
 {
   "name": "react-dom-outside",
-  "version": "0.1.9",
-  "description": "React components for click outside",
+  "version": "0.0.0",
+  "description": "React components for react-dom and react-native-web click outside",
   "keywords": [
     "react",
-    "native",
     "web",
+    "react-dom",
     "dom",
     "contains",
+    "outside",
     "universal",
     "typescript"
   ],

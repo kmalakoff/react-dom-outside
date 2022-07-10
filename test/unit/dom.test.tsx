@@ -62,17 +62,17 @@ describe('react-dom', function () {
         <button id="outside" />
       </React.Fragment>,
     );
-    await sleep(5); // wait for useEffect to resolve
+    await sleep(3); // wait for useEffect to resolve
 
     // inside
     assert.equal(container.querySelector('#text').innerHTML, 'not active');
     (container.querySelector('#toggle') as HTMLElement).click();
-    await sleep(5); // wait for useEffect to resolve
+    await sleep(3); // wait for useEffect to resolve
     assert.equal(container.querySelector('#text').innerHTML, 'active');
 
     // outside
     (container.querySelector('#outside') as HTMLElement).click();
-    await sleep(5); // wait for useEffect to resolve
+    await sleep(3); // wait for useEffect to resolve
     assert.equal(container.querySelector('#text').innerHTML, 'not active');
   });
 
@@ -133,22 +133,22 @@ describe('react-dom', function () {
         />
       </React.Fragment>,
     );
-    await sleep(5); // wait for useEffect to resolve
+    await sleep(3); // wait for useEffect to resolve
 
     // inside
     assert.equal(container.querySelector('#text').innerHTML, 'not active');
     (container.querySelector('#toggle') as HTMLElement).click();
-    await sleep(5); // wait for useEffect to resolve
+    await sleep(3); // wait for useEffect to resolve
     assert.equal(container.querySelector('#text').innerHTML, 'active');
 
     // portal
     (container.querySelector('#portal-click') as HTMLElement).click();
-    await sleep(5); // wait for useEffect to resolve
+    await sleep(3); // wait for useEffect to resolve
     assert.equal(container.querySelector('#text').innerHTML, 'active');
 
     // outside
     (container.querySelector('#outside') as HTMLElement).click();
-    await sleep(5); // wait for useEffect to resolve
+    await sleep(3); // wait for useEffect to resolve
     assert.equal(container.querySelector('#text').innerHTML, 'not active');
   });
 });
