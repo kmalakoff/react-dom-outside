@@ -1,4 +1,5 @@
 global.IS_REACT_ACT_ENVIRONMENT = true;
+import "../lib/pollyfills.cjs"
 
 import assert from 'assert';
 import React from 'react';
