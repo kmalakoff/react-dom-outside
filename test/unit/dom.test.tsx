@@ -1,17 +1,14 @@
+global.IS_REACT_ACT_ENVIRONMENT = true;
+
 import assert from 'assert';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createRoot, Root } from 'react-dom/client';
+import { act } from 'react-dom/test-utils';
 
 import { Active, ActiveBoundary } from 'react-dom-outside';
 import { EventProvider } from 'react-dom-event';
 import { useRef } from 'react-ref-boundary';
-
-function sleep(ms) {
-  return new Promise(function (resolve) {
-    setTimeout(resolve, ms);
-  });
-}
 
 describe('react-dom', function () {
   let container: HTMLDivElement | null = null;
@@ -23,13 +20,13 @@ describe('react-dom', function () {
   });
 
   afterEach(function () {
-    root.unmount();
+    act(() => root.unmount());
     root = null;
     container.remove();
     container = null;
   });
 
-  it('Active', async function () {
+  it('Active', function () {
     type ComponentProps = {
       isActive?: boolean | undefined;
       setIsActive?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -52,31 +49,30 @@ describe('react-dom', function () {
       );
     });
 
-    root.render(
-      <React.Fragment>
-        <EventProvider>
-          <Active>
-            <Component />
-          </Active>
-        </EventProvider>
-        <button id="outside" />
-      </React.Fragment>,
+    act(() =>
+      root.render(
+        <React.Fragment>
+          <EventProvider>
+            <Active>
+              <Component />
+            </Active>
+          </EventProvider>
+          <button id="outside" />
+        </React.Fragment>,
+      ),
     );
-    await sleep(3); // wait for useEffect to resolve
 
     // inside
     assert.equal(container.querySelector('#text').innerHTML, 'not active');
-    (container.querySelector('#toggle') as HTMLElement).click();
-    await sleep(3); // wait for useEffect to resolve
+    act(() => (container.querySelector('#toggle') as HTMLElement).click());
     assert.equal(container.querySelector('#text').innerHTML, 'active');
 
     // outside
-    (container.querySelector('#outside') as HTMLElement).click();
-    await sleep(3); // wait for useEffect to resolve
+    act(() => (container.querySelector('#outside') as HTMLElement).click());
     assert.equal(container.querySelector('#text').innerHTML, 'not active');
   });
 
-  it('ActiveBoundary', async function () {
+  it('ActiveBoundary', function () {
     type ComponentProps = {
       isActive?: boolean | undefined;
       setIsActive?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -118,37 +114,37 @@ describe('react-dom', function () {
       );
     });
 
-    root.render(
-      <React.Fragment>
-        <EventProvider>
-          <ActiveBoundary>
-            <Component />
-          </ActiveBoundary>
-        </EventProvider>
-        <button
-          id="outside"
-          onClick={function (event) {
-            event.stopPropagation();
-          }}
-        />
-      </React.Fragment>,
+    act(() =>
+      root.render(
+        <React.Fragment>
+          <EventProvider>
+            <ActiveBoundary>
+              <Component />
+            </ActiveBoundary>
+          </EventProvider>
+          <button
+            id="outside"
+            onClick={function (event) {
+              event.stopPropagation();
+            }}
+          />
+        </React.Fragment>,
+      ),
     );
-    await sleep(3); // wait for useEffect to resolve
 
     // inside
     assert.equal(container.querySelector('#text').innerHTML, 'not active');
-    (container.querySelector('#toggle') as HTMLElement).click();
-    await sleep(3); // wait for useEffect to resolve
+    act(() => (container.querySelector('#toggle') as HTMLElement).click());
     assert.equal(container.querySelector('#text').innerHTML, 'active');
 
     // portal
-    (container.querySelector('#portal-click') as HTMLElement).click();
-    await sleep(3); // wait for useEffect to resolve
+    act(() =>
+      (container.querySelector('#portal-click') as HTMLElement).click(),
+    );
     assert.equal(container.querySelector('#text').innerHTML, 'active');
 
     // outside
-    (container.querySelector('#outside') as HTMLElement).click();
-    await sleep(3); // wait for useEffect to resolve
+    act(() => (container.querySelector('#outside') as HTMLElement).click());
     assert.equal(container.querySelector('#text').innerHTML, 'not active');
   });
 });
