@@ -1,7 +1,3 @@
-/**
- * @jest-environment jsdom
- */
-
 import assert from 'assert';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -11,7 +7,7 @@ import { View, Text } from 'react-native-web';
 import { Active, ActiveBoundary } from 'react-dom-outside';
 import { EventProvider } from 'react-dom-event';
 import { useRef } from 'react-ref-boundary';
-import findByTestID from '../lib/findByTestID';
+import getByTestId from '../lib/getByTestId';
 
 function sleep(ms) {
   return new Promise(function (resolve) {
@@ -68,18 +64,18 @@ describe('react-native-web', function () {
         <View testID="outside" />
       </React.Fragment>,
     );
-    await sleep(5); // wait for useEffect to resolve
+    await sleep(3); // wait for useEffect to resolve
 
     // inside
-    assert.equal(findByTestID(container, 'text').innerHTML, 'not active');
-    (findByTestID(container, 'toggle') as HTMLElement).click();
-    await sleep(5); // wait for useEffect to resolve
-    assert.equal(findByTestID(container, 'text').innerHTML, 'active');
+    assert.equal(getByTestId(container, 'text').innerHTML, 'not active');
+    (getByTestId(container, 'toggle') as HTMLElement).click();
+    await sleep(3); // wait for useEffect to resolve
+    assert.equal(getByTestId(container, 'text').innerHTML, 'active');
 
     // outside
-    (findByTestID(container, 'outside') as HTMLElement).click();
-    await sleep(5); // wait for useEffect to resolve
-    assert.equal(findByTestID(container, 'text').innerHTML, 'not active');
+    (getByTestId(container, 'outside') as HTMLElement).click();
+    await sleep(3); // wait for useEffect to resolve
+    assert.equal(getByTestId(container, 'text').innerHTML, 'not active');
   });
 
   it('ActiveBoundary', async function () {
@@ -139,22 +135,22 @@ describe('react-native-web', function () {
         />
       </React.Fragment>,
     );
-    await sleep(5); // wait for useEffect to resolve
+    await sleep(3); // wait for useEffect to resolve
 
     // inside
-    assert.equal(findByTestID(container, 'text').innerHTML, 'not active');
-    (findByTestID(container, 'toggle') as HTMLElement).click();
-    await sleep(5); // wait for useEffect to resolve
-    assert.equal(findByTestID(container, 'text').innerHTML, 'active');
+    assert.equal(getByTestId(container, 'text').innerHTML, 'not active');
+    (getByTestId(container, 'toggle') as HTMLElement).click();
+    await sleep(3); // wait for useEffect to resolve
+    assert.equal(getByTestId(container, 'text').innerHTML, 'active');
 
     // portal
-    (findByTestID(container, 'portal-click') as HTMLElement).click();
-    await sleep(5); // wait for useEffect to resolve
-    assert.equal(findByTestID(container, 'text').innerHTML, 'active');
+    (getByTestId(container, 'portal-click') as HTMLElement).click();
+    await sleep(3); // wait for useEffect to resolve
+    assert.equal(getByTestId(container, 'text').innerHTML, 'active');
 
     // outside
-    (findByTestID(container, 'outside') as HTMLElement).click();
-    await sleep(5); // wait for useEffect to resolve
-    assert.equal(findByTestID(container, 'text').innerHTML, 'not active');
+    (getByTestId(container, 'outside') as HTMLElement).click();
+    await sleep(3); // wait for useEffect to resolve
+    assert.equal(getByTestId(container, 'text').innerHTML, 'not active');
   });
 });
