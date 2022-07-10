@@ -12,9 +12,7 @@ export default function getByTestId(element: Element, testID: string) {
       if (found) return found;
     }
     return null;
-  }
-
-  else {
+  } else {
     if (match(element, testID)) return element;
     if (!element.children) return;
     for (let i = 0; i < element.children.length; i++) {
