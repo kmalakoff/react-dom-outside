@@ -1,19 +1,16 @@
+global.IS_REACT_ACT_ENVIRONMENT = true;
+
 import assert from 'assert';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createRoot, Root } from 'react-dom/client';
+import { act } from 'react-dom/test-utils';
 
 import { View, Text } from 'react-native-web';
 import { Active, ActiveBoundary } from 'react-dom-outside';
 import { EventProvider } from 'react-dom-event';
 import { useRef } from 'react-ref-boundary';
 import getByTestId from '../lib/getByTestId';
-
-function sleep(ms) {
-  return new Promise(function (resolve) {
-    setTimeout(resolve, ms);
-  });
-}
 
 describe('react-native-web', function () {
   let container: HTMLDivElement | null = null;
@@ -25,13 +22,13 @@ describe('react-native-web', function () {
   });
 
   afterEach(function () {
-    root.unmount();
+    act(() => root.unmount());
     root = null;
     container.remove();
     container = null;
   });
 
-  it('Active', async function () {
+  it('Active', function () {
     type ComponentProps = {
       isActive?: boolean | undefined;
       setIsActive?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -54,31 +51,30 @@ describe('react-native-web', function () {
       );
     });
 
-    root.render(
-      <React.Fragment>
-        <EventProvider>
-          <Active>
-            <Component />
-          </Active>
-        </EventProvider>
-        <View testID="outside" />
-      </React.Fragment>,
+    act(() =>
+      root.render(
+        <React.Fragment>
+          <EventProvider>
+            <Active>
+              <Component />
+            </Active>
+          </EventProvider>
+          <View testID="outside" />
+        </React.Fragment>,
+      ),
     );
-    await sleep(3); // wait for useEffect to resolve
 
     // inside
     assert.equal(getByTestId(container, 'text').innerHTML, 'not active');
-    (getByTestId(container, 'toggle') as HTMLElement).click();
-    await sleep(3); // wait for useEffect to resolve
+    act(() => (getByTestId(container, 'toggle') as HTMLElement).click());
     assert.equal(getByTestId(container, 'text').innerHTML, 'active');
 
     // outside
-    (getByTestId(container, 'outside') as HTMLElement).click();
-    await sleep(3); // wait for useEffect to resolve
+    act(() => (getByTestId(container, 'outside') as HTMLElement).click());
     assert.equal(getByTestId(container, 'text').innerHTML, 'not active');
   });
 
-  it('ActiveBoundary', async function () {
+  it('ActiveBoundary', function () {
     type ComponentProps = {
       isActive?: boolean | undefined;
       setIsActive?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -120,37 +116,35 @@ describe('react-native-web', function () {
       );
     });
 
-    root.render(
-      <React.Fragment>
-        <EventProvider>
-          <ActiveBoundary>
-            <Component />
-          </ActiveBoundary>
-        </EventProvider>
-        <View
-          testID="outside"
-          onClick={function (event) {
-            event.stopPropagation();
-          }}
-        />
-      </React.Fragment>,
+    act(() =>
+      root.render(
+        <React.Fragment>
+          <EventProvider>
+            <ActiveBoundary>
+              <Component />
+            </ActiveBoundary>
+          </EventProvider>
+          <View
+            testID="outside"
+            onClick={function (event) {
+              event.stopPropagation();
+            }}
+          />
+        </React.Fragment>,
+      ),
     );
-    await sleep(3); // wait for useEffect to resolve
 
     // inside
     assert.equal(getByTestId(container, 'text').innerHTML, 'not active');
-    (getByTestId(container, 'toggle') as HTMLElement).click();
-    await sleep(3); // wait for useEffect to resolve
+    act(() => (getByTestId(container, 'toggle') as HTMLElement).click());
     assert.equal(getByTestId(container, 'text').innerHTML, 'active');
 
     // portal
-    (getByTestId(container, 'portal-click') as HTMLElement).click();
-    await sleep(3); // wait for useEffect to resolve
+    act(() => (getByTestId(container, 'portal-click') as HTMLElement).click());
     assert.equal(getByTestId(container, 'text').innerHTML, 'active');
 
     // outside
-    (getByTestId(container, 'outside') as HTMLElement).click();
-    await sleep(3); // wait for useEffect to resolve
+    act(() => (getByTestId(container, 'outside') as HTMLElement).click());
     assert.equal(getByTestId(container, 'text').innerHTML, 'not active');
   });
 });
