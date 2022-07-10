@@ -1,13 +1,11 @@
 import React from 'react';
-
 import { useEvent } from 'react-dom-event';
 
-// @ts-ignore
-import ActiveBase from './lib/ActiveBase.tsx';
-
-function ActiveComponent({ isActive, setIsActive, children, ...rest }) {
+export default function Active({ children }) {
+  const state = React.useState<boolean>(false);
+  const isActive = state[0];
+  const setIsActive = state[1];
   const ref = React.useRef<HTMLElement>(null);
-
   useEvent(
     (event) => {
       if (!isActive) return;
@@ -18,29 +16,12 @@ function ActiveComponent({ isActive, setIsActive, children, ...rest }) {
   );
 
   return (
-    <ActiveBase
-      isActive={isActive}
-      setIsActive={setIsActive}
-      ref={ref}
-      {...rest}
-    >
-      {children}
-    </ActiveBase>
-  );
-}
-
-export default function Active({ children, ...rest }) {
-  const state = React.useState<boolean>(false);
-  const isActive = state[0];
-  const setIsActive = state[1];
-  const Component = isActive ? ActiveComponent : ActiveBase;
-  return (
-    <Component {...rest} isActive={isActive} setIsActive={setIsActive}>
+    <React.Fragment>
       {React.Children.map<React.ReactNode, React.ReactNode>(children, (child) =>
         React.isValidElement(child)
-          ? React.cloneElement(child, { isActive, setIsActive })
+          ? React.cloneElement(child, { isActive, setIsActive, ref })
           : child,
       )}
-    </Component>
+    </React.Fragment>
   );
 }

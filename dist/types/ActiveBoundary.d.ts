@@ -1,5 +1,4 @@
 /// <reference types="react" />
-export default function ActiveBoundaryNative({ children, ...rest }: {
-    [x: string]: any;
+export default function ActiveBoundary({ children }: {
     children: any;
 }): JSX.Element;

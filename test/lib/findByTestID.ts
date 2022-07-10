@@ -1,6 +1,6 @@
 function match(element: Element, testID: string): boolean {
   const propsKey = Object.keys(element).find(function (x) {
-    return x.startsWith('__reactProps')
+    return x.startsWith('__reactProps');
   });
   return propsKey ? element[propsKey]['data-testid'] === testID : false;
 }

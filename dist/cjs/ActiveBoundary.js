@@ -2,81 +2,27 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-module.exports = ActiveBoundaryNative;
+module.exports = ActiveBoundary;
 var _react = _interopRequireDefault(require("react"));
 var _reactDomEvent = require("react-dom-event");
 var _reactRefBoundary = require("react-ref-boundary");
-var _activeBaseTsx = _interopRequireDefault(require("./lib/ActiveBase.js"));
-function ActiveBoundaryNative(_param) {
-    var children = _param.children, rest = _objectWithoutProperties(_param, [
-        "children"
-    ]);
+function ActiveBoundary(param) {
+    var children = param.children;
     var state = _react.default.useState(false);
     var isActive = state[0];
     var setIsActive = state[1];
-    var Component = isActive ? ActiveComponent : _activeBaseTsx.default;
-    return /*#__PURE__*/ _react.default.createElement(_reactRefBoundary.BoundaryProvider, null, /*#__PURE__*/ _react.default.createElement(Component, _extends({}, rest, {
+    return /*#__PURE__*/ _react.default.createElement(_reactRefBoundary.BoundaryProvider, null, /*#__PURE__*/ _react.default.createElement(Component, {
         isActive: isActive,
         setIsActive: setIsActive
-    }), _react.default.Children.map(children, function(child) {
-        return /*#__PURE__*/ _react.default.isValidElement(child) ? /*#__PURE__*/ _react.default.cloneElement(child, {
-            isActive: isActive,
-            setIsActive: setIsActive
-        }) : child;
-    })));
-}
-function _extends() {
-    _extends = Object.assign || function(target) {
-        for(var i = 1; i < arguments.length; i++){
-            var source = arguments[i];
-            for(var key in source){
-                if (Object.prototype.hasOwnProperty.call(source, key)) {
-                    target[key] = source[key];
-                }
-            }
-        }
-        return target;
-    };
-    return _extends.apply(this, arguments);
+    }, children));
 }
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
 }
-function _objectWithoutProperties(source, excluded) {
-    if (source == null) return {};
-    var target = _objectWithoutPropertiesLoose(source, excluded);
-    var key, i;
-    if (Object.getOwnPropertySymbols) {
-        var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
-        for(i = 0; i < sourceSymbolKeys.length; i++){
-            key = sourceSymbolKeys[i];
-            if (excluded.indexOf(key) >= 0) continue;
-            if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
-            target[key] = source[key];
-        }
-    }
-    return target;
-}
-function _objectWithoutPropertiesLoose(source, excluded) {
-    if (source == null) return {};
-    var target = {};
-    var sourceKeys = Object.keys(source);
-    var key, i;
-    for(i = 0; i < sourceKeys.length; i++){
-        key = sourceKeys[i];
-        if (excluded.indexOf(key) >= 0) continue;
-        target[key] = source[key];
-    }
-    return target;
-}
-function ActiveComponent(_param) {
-    var isActive = _param.isActive, setIsActive = _param.setIsActive, children = _param.children, rest = _objectWithoutProperties(_param, [
-        "isActive",
-        "setIsActive",
-        "children"
-    ]);
+function Component(param) {
+    var children = param.children, isActive = param.isActive, setIsActive = param.setIsActive;
     var ref = (0, _reactRefBoundary).useRef(null);
     var boundary = (0, _reactRefBoundary).useBoundary();
     (0, _reactDomEvent).useEvent(function(event) {
@@ -90,9 +36,11 @@ function ActiveComponent(_param) {
         isActive,
         setIsActive
     ]);
-    return /*#__PURE__*/ _react.default.createElement(_activeBaseTsx.default, _extends({
-        isActive: isActive,
-        setIsActive: setIsActive,
-        ref: ref
-    }, rest), children);
+    return /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, _react.default.Children.map(children, function(child) {
+        return /*#__PURE__*/ _react.default.isValidElement(child) ? /*#__PURE__*/ _react.default.cloneElement(child, {
+            isActive: isActive,
+            setIsActive: setIsActive,
+            ref: ref
+        }) : child;
+    }));
 }
