@@ -51,7 +51,7 @@
     "react-dom-event": "^0.1.2",
     "react-native-web": "0.18.4",
     "react-ref-boundary": "^0.1.2",
-    "ts-dev-stack": "^0.7.1"
+    "ts-dev-stack": "^0.7.2"
   },
   "peerDependencies": {
     "react": "*"
