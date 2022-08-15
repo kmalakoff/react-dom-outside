@@ -2,16 +2,26 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-module.exports = Active;
-var _react = _interopRequireDefault(require("react"));
+Object.defineProperty(exports, "default", {
+    enumerable: true,
+    get: function() {
+        return Active;
+    }
+});
+var _react = /*#__PURE__*/ _interopRequireDefault(require("react"));
 var _reactDomEvent = require("react-dom-event");
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
 function Active(param) {
     var children = param.children;
     var state = _react.default.useState(false);
     var isActive = state[0];
     var setIsActive = state[1];
     var ref = _react.default.useRef(null);
-    (0, _reactDomEvent).useEvent(function(event) {
+    (0, _reactDomEvent.useEvent)(function(event) {
         if (!isActive) return;
         if (ref.current && ref.current.contains(event.target)) return;
         setIsActive(false);
@@ -27,8 +37,9 @@ function Active(param) {
         }) : child;
     }));
 }
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
+
+if ((typeof exports.default === 'function' || (typeof exports.default === 'object' && exports.default !== null)) && typeof exports.default.__esModule === 'undefined') {
+  Object.defineProperty(exports.default, '__esModule', { value: true });
+  for (var key in exports) exports.default[key] = exports[key];
+  module.exports = exports.default;
 }
