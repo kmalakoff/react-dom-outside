@@ -12,23 +12,10 @@
     "universal",
     "typescript"
   ],
+  "repository": "kmalakoff/react-dom-outside",
   "license": "MIT",
   "author": "Kevin Malakoff <kmalakoff@gmail.com> (https://github.com/kmalakoff)",
-  "files": [
-    "dist"
-  ],
-  "tsds": {
-    "source": "src/index.ts",
-    "globals": {
-      "react": "React",
-      "react-dom-event": "reactDomEvent",
-      "react-dom-contains": "reactDomContains",
-      "react-ref-boundary": "ReactRefBoundary"
-    }
-  },
   "type": "module",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.mjs",
   "exports": {
     ".": {
       "import": "./dist/esm/index.mjs",
@@ -37,27 +24,34 @@
     },
     "./*": "./*"
   },
+  "main": "dist/cjs/index.js",
+  "unpkg": "dist/umd/react-dom-outside.js",
+  "module": "dist/esm/index.mjs",
   "types": "dist/types/index.d.ts",
-  "repository": "kmalakoff/react-dom-outside",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsds build",
     "deploy": "tsds deploy",
     "format": "tsds format",
     "lint": "tsds lint",
     "test": "tsds test:node && tsds test:browser",
+    "test:engines": "nvu engines tsds test:node && tsds test:browser",
     "version": "tsds version"
   },
   "devDependencies": {
     "@types/mocha": "^9.1.1",
-    "@types/react": "18.0.15",
+    "@types/node": "^18.7.5",
+    "@types/react": "18.0.17",
     "@types/react-dom": "^18.0.6",
-    "jsdom": "^15.2.1",
+    "jsdom": "^9.12.0",
     "react": "18.2.x",
     "react-dom": "18.2.x",
     "react-dom-event": "^0.1.2",
     "react-native-web": "0.18.4",
     "react-ref-boundary": "^0.1.2",
-    "ts-dev-stack": "^0.6.6"
+    "ts-dev-stack": "^0.8.10"
   },
   "peerDependencies": {
     "react": "*"
@@ -69,5 +63,13 @@
   "engines": {
     "node": ">=4"
   },
-  "unpkg": "dist/umd/react-dom-outside.js"
+  "tsds": {
+    "source": "src/index.ts",
+    "globals": {
+      "react": "React",
+      "react-dom-event": "reactDomEvent",
+      "react-dom-contains": "reactDomContains",
+      "react-ref-boundary": "ReactRefBoundary"
+    }
+  }
 }
