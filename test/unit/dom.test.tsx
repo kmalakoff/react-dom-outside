@@ -4,51 +4,50 @@ import '../lib/pollyfills.cjs';
 import assert from 'assert';
 
 import React from 'react';
-import { forwardRef, useRef as useRefReact, useEffect, Fragment } from 'react';
-import { Dispatch, SetStateAction, RefObject } from 'react';
+import { Fragment, forwardRef, useEffect, useRef as useRefReact } from 'react';
+import { Dispatch, RefObject, SetStateAction } from 'react';
 import { createPortal } from 'react-dom';
-import { createRoot, Root } from 'react-dom/client';
+import { Root, createRoot } from 'react-dom/client';
 import { act } from 'react-dom/test-utils';
 
-import { Active, ActiveBoundary } from 'react-dom-outside';
 import { EventProvider } from 'react-dom-event';
+import { Active, ActiveBoundary } from 'react-dom-outside';
 import { useRef } from 'react-ref-boundary';
 
-describe('react-dom', function () {
+describe('react-dom', () => {
   let container: HTMLDivElement | null = null;
   let root: Root | null = null;
-  beforeEach(function () {
+  beforeEach(() => {
     container = document.createElement('div');
     document.body.appendChild(container);
     root = createRoot(container);
   });
 
-  afterEach(function () {
+  afterEach(() => {
     act(() => root.unmount());
     root = null;
     container.remove();
     container = null;
   });
 
-  it('Active', function () {
+  it('Active', () => {
     type ComponentProps = {
       isActive?: boolean | undefined;
       setIsActive?: Dispatch<SetStateAction<boolean>>;
     };
 
-    const Component = forwardRef(function ({ isActive, setIsActive }: ComponentProps, ref: RefObject<HTMLDivElement>) {
-      return (
-        <div ref={ref}>
-          <div id="text">{isActive ? 'active' : 'not active'}</div>
-          <button
-            id="toggle"
-            onClick={function () {
-              setIsActive(!isActive);
-            }}
-          />
-        </div>
-      );
-    });
+    const Component = forwardRef(({ isActive, setIsActive }: ComponentProps, ref: RefObject<HTMLDivElement>) => (
+      <div ref={ref}>
+        <div id="text">{isActive ? 'active' : 'not active'}</div>
+        <button
+          type="button"
+          id="toggle"
+          onClick={() => {
+            setIsActive(!isActive);
+          }}
+        />
+      </div>
+    ));
 
     act(() =>
       root.render(
@@ -58,9 +57,9 @@ describe('react-dom', function () {
               <Component />
             </Active>
           </EventProvider>
-          <button id="outside" />
-        </Fragment>
-      )
+          <button type="button" id="outside" />
+        </Fragment>,
+      ),
     );
 
     // inside
@@ -73,7 +72,7 @@ describe('react-dom', function () {
     assert.equal(container.querySelector('#text').innerHTML, 'not active');
   });
 
-  it('ActiveBoundary', function () {
+  it('ActiveBoundary', () => {
     type ComponentProps = {
       isActive?: boolean | undefined;
       setIsActive?: Dispatch<SetStateAction<boolean>>;
@@ -82,35 +81,35 @@ describe('react-dom', function () {
     function PortalComponent() {
       const ref = useRef(null);
       const el = useRefReact(document.createElement('div'));
-      useEffect(function () {
+      useEffect(() => {
         container.appendChild(el.current);
       });
       return createPortal(
         <button
           ref={ref}
+          type="button"
           id="portal-click"
-          onClick={function (event) {
+          onClick={(event) => {
             event.stopPropagation();
           }}
         />,
-        el.current
+        el.current,
       );
     }
 
-    const Component = forwardRef(function ({ isActive, setIsActive }: ComponentProps, ref: RefObject<HTMLDivElement>) {
-      return (
-        <div ref={ref}>
-          <div id="text">{isActive ? 'active' : 'not active'}</div>
-          <button
-            id="toggle"
-            onClick={function () {
-              setIsActive(!isActive);
-            }}
-          />
-          <PortalComponent />
-        </div>
-      );
-    });
+    const Component = forwardRef(({ isActive, setIsActive }: ComponentProps, ref: RefObject<HTMLDivElement>) => (
+      <div ref={ref}>
+        <div id="text">{isActive ? 'active' : 'not active'}</div>
+        <button
+          type="button"
+          id="toggle"
+          onClick={() => {
+            setIsActive(!isActive);
+          }}
+        />
+        <PortalComponent />
+      </div>
+    ));
 
     act(() =>
       root.render(
@@ -121,13 +120,14 @@ describe('react-dom', function () {
             </ActiveBoundary>
           </EventProvider>
           <button
+            type="button"
             id="outside"
-            onClick={function (event) {
+            onClick={(event) => {
               event.stopPropagation();
             }}
           />
-        </Fragment>
-      )
+        </Fragment>,
+      ),
     );
 
     // inside
