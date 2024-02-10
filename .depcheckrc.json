@@ -1,4 +1,12 @@
 {
   "extends": "./node_modules/ts-dev-stack/config/.depcheckrc.json",
-  "ignores": ["react-dom-outside", "@types/*", "@typescript-eslint/*", "eslint-*", "jsdom", "react", "react-*"]
+  "ignores": [
+    "react-dom-outside",
+    "@types/*",
+    "@typescript-eslint/*",
+    "eslint-*",
+    "jsdom",
+    "react",
+    "react-*"
+  ]
 }
