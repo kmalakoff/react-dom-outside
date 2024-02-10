@@ -2,8 +2,11 @@ global.IS_REACT_ACT_ENVIRONMENT = true;
 import '../lib/pollyfills.cjs';
 
 import assert from 'assert';
+
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { forwardRef, useRef as useRefReact, useEffect, Fragment } from 'react';
+import { Dispatch, SetStateAction, RefObject } from 'react';
+import { createPortal } from 'react-dom';
 import { createRoot, Root } from 'react-dom/client';
 import { act } from 'react-dom/test-utils';
 
@@ -30,13 +33,10 @@ describe('react-dom', function () {
   it('Active', function () {
     type ComponentProps = {
       isActive?: boolean | undefined;
-      setIsActive?: React.Dispatch<React.SetStateAction<boolean>>;
+      setIsActive?: Dispatch<SetStateAction<boolean>>;
     };
 
-    const Component = React.forwardRef(function (
-      { isActive, setIsActive }: ComponentProps,
-      ref: React.RefObject<HTMLDivElement>,
-    ) {
+    const Component = forwardRef(function ({ isActive, setIsActive }: ComponentProps, ref: RefObject<HTMLDivElement>) {
       return (
         <div ref={ref}>
           <div id="text">{isActive ? 'active' : 'not active'}</div>
@@ -52,15 +52,15 @@ describe('react-dom', function () {
 
     act(() =>
       root.render(
-        <React.Fragment>
+        <Fragment>
           <EventProvider>
             <Active>
               <Component />
             </Active>
           </EventProvider>
           <button id="outside" />
-        </React.Fragment>,
-      ),
+        </Fragment>
+      )
     );
 
     // inside
@@ -76,16 +76,16 @@ describe('react-dom', function () {
   it('ActiveBoundary', function () {
     type ComponentProps = {
       isActive?: boolean | undefined;
-      setIsActive?: React.Dispatch<React.SetStateAction<boolean>>;
+      setIsActive?: Dispatch<SetStateAction<boolean>>;
     };
 
     function PortalComponent() {
       const ref = useRef(null);
-      const el = React.useRef(document.createElement('div'));
-      React.useEffect(function () {
+      const el = useRefReact(document.createElement('div'));
+      useEffect(function () {
         container.appendChild(el.current);
       });
-      return ReactDOM.createPortal(
+      return createPortal(
         <button
           ref={ref}
           id="portal-click"
@@ -93,14 +93,11 @@ describe('react-dom', function () {
             event.stopPropagation();
           }}
         />,
-        el.current,
+        el.current
       );
     }
 
-    const Component = React.forwardRef(function (
-      { isActive, setIsActive }: ComponentProps,
-      ref: React.RefObject<HTMLDivElement>,
-    ) {
+    const Component = forwardRef(function ({ isActive, setIsActive }: ComponentProps, ref: RefObject<HTMLDivElement>) {
       return (
         <div ref={ref}>
           <div id="text">{isActive ? 'active' : 'not active'}</div>
@@ -117,7 +114,7 @@ describe('react-dom', function () {
 
     act(() =>
       root.render(
-        <React.Fragment>
+        <Fragment>
           <EventProvider>
             <ActiveBoundary>
               <Component />
@@ -129,8 +126,8 @@ describe('react-dom', function () {
               event.stopPropagation();
             }}
           />
-        </React.Fragment>,
-      ),
+        </Fragment>
+      )
     );
 
     // inside
@@ -139,9 +136,7 @@ describe('react-dom', function () {
     assert.equal(container.querySelector('#text').innerHTML, 'active');
 
     // portal
-    act(() =>
-      (container.querySelector('#portal-click') as HTMLElement).click(),
-    );
+    act(() => (container.querySelector('#portal-click') as HTMLElement).click());
     assert.equal(container.querySelector('#text').innerHTML, 'active');
 
     // outside
