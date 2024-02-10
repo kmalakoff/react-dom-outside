@@ -3,7 +3,9 @@ import '../lib/pollyfills.cjs';
 
 import assert from 'assert';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { useEffect, forwardRef, Fragment } from 'react';
+import { Dispatch, SetStateAction, RefObject } from 'react';
+import { createPortal } from 'react-dom';
 import { createRoot, Root } from 'react-dom/client';
 import { act } from 'react-dom/test-utils';
 
@@ -32,13 +34,10 @@ describe('react-native-web', function () {
   it('Active', function () {
     type ComponentProps = {
       isActive?: boolean | undefined;
-      setIsActive?: React.Dispatch<React.SetStateAction<boolean>>;
+      setIsActive?: Dispatch<SetStateAction<boolean>>;
     };
 
-    const Component = React.forwardRef(function (
-      { isActive, setIsActive }: ComponentProps,
-      ref: React.RefObject<View>,
-    ) {
+    const Component = forwardRef(function ({ isActive, setIsActive }: ComponentProps, ref: RefObject<View>) {
       return (
         <View ref={ref}>
           <Text testID="text">{isActive ? 'active' : 'not active'}</Text>
@@ -54,15 +53,15 @@ describe('react-native-web', function () {
 
     act(() =>
       root.render(
-        <React.Fragment>
+        <Fragment>
           <EventProvider>
             <Active>
               <Component />
             </Active>
           </EventProvider>
           <View testID="outside" />
-        </React.Fragment>,
-      ),
+        </Fragment>
+      )
     );
 
     // inside
@@ -78,16 +77,16 @@ describe('react-native-web', function () {
   it('ActiveBoundary', function () {
     type ComponentProps = {
       isActive?: boolean | undefined;
-      setIsActive?: React.Dispatch<React.SetStateAction<boolean>>;
+      setIsActive?: Dispatch<SetStateAction<boolean>>;
     };
 
     function PortalComponent() {
       const ref = useRef(null);
-      const el = React.useRef(document.createElement('View'));
-      React.useEffect(function () {
+      const el = useRef(document.createElement('View'));
+      useEffect(function () {
         container.appendChild(el.current);
       });
-      return ReactDOM.createPortal(
+      return createPortal(
         <View
           ref={ref}
           testID="portal-click"
@@ -95,14 +94,11 @@ describe('react-native-web', function () {
             event.stopPropagation();
           }}
         />,
-        el.current,
+        el.current
       );
     }
 
-    const Component = React.forwardRef(function (
-      { isActive, setIsActive }: ComponentProps,
-      ref: React.RefObject<View>,
-    ) {
+    const Component = forwardRef(function ({ isActive, setIsActive }: ComponentProps, ref: RefObject<View>) {
       return (
         <View ref={ref}>
           <Text testID="text">{isActive ? 'active' : 'not active'}</Text>
@@ -119,7 +115,7 @@ describe('react-native-web', function () {
 
     act(() =>
       root.render(
-        <React.Fragment>
+        <Fragment>
           <EventProvider>
             <ActiveBoundary>
               <Component />
@@ -131,8 +127,8 @@ describe('react-native-web', function () {
               event.stopPropagation();
             }}
           />
-        </React.Fragment>,
-      ),
+        </Fragment>
+      )
     );
 
     // inside
