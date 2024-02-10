@@ -1,6 +1,6 @@
 {
   "name": "react-dom-outside",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "React components for react-dom and react-native-web click outside",
   "keywords": [
     "react",
@@ -36,22 +36,23 @@
     "deploy": "tsds deploy",
     "format": "tsds format",
     "lint": "tsds lint",
-    "test": "tsds test:node && tsds test:browser",
+    "test": "tsds test:browser",
+    "testworkaround": "tsds test:node && tsds test:browser",
     "test:engines": "nvu engines tsds test:node && tsds test:browser",
     "version": "tsds version"
   },
   "devDependencies": {
-    "@types/mocha": "^9.1.1",
-    "@types/node": "^18.7.5",
-    "@types/react": "18.0.17",
-    "@types/react-dom": "^18.0.6",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.11.17",
+    "@types/react": "18.2.55",
+    "@types/react-dom": "^18.2.19",
     "jsdom": "^9.12.0",
     "react": "18.2.x",
     "react-dom": "18.2.x",
     "react-dom-event": "^0.1.2",
     "react-native-web": "0.18.4",
     "react-ref-boundary": "^0.1.2",
-    "ts-dev-stack": "^0.8.10"
+    "ts-dev-stack": "^0.8.12"
   },
   "peerDependencies": {
     "react": "*"
