@@ -58,8 +58,8 @@ describe('react-native-web', () => {
             </Active>
           </EventProvider>
           <View testID="outside" />
-        </Fragment>,
-      ),
+        </Fragment>
+      )
     );
 
     // inside
@@ -92,7 +92,7 @@ describe('react-native-web', () => {
             event.stopPropagation();
           }}
         />,
-        el.current,
+        el.current
       );
     }
 
@@ -123,8 +123,8 @@ describe('react-native-web', () => {
               event.stopPropagation();
             }}
           />
-        </Fragment>,
-      ),
+        </Fragment>
+      )
     );
 
     // inside

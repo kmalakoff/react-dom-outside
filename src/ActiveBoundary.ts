@@ -15,7 +15,7 @@ function Component({ children, isActive, setIsActive }) {
       }
       setIsActive(false);
     },
-    [isActive, setIsActive],
+    [isActive, setIsActive]
   );
 
   return createElement(
@@ -29,8 +29,8 @@ function Component({ children, isActive, setIsActive }) {
             setIsActive,
             ref,
           })
-        : child,
-    ),
+        : child
+    )
   );
 }
 

@@ -13,7 +13,7 @@ export default function Active({ children }) {
       if (ref.current?.contains(event.target)) return;
       setIsActive(false);
     },
-    [isActive, setIsActive],
+    [isActive, setIsActive]
   );
 
   return createElement(
@@ -27,7 +27,7 @@ export default function Active({ children }) {
             setIsActive,
             ref,
           })
-        : child,
-    ),
+        : child
+    )
   );
 }
