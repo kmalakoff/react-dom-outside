@@ -1,5 +1,5 @@
-import { useState, Fragment, Children, isValidElement, cloneElement, createElement } from 'react';
-import type { RefObject, ReactElement, FC, Dispatch, ReactNode } from 'react';
+import { Children, Fragment, cloneElement, createElement, isValidElement, useState } from 'react';
+import type { Dispatch, FC, ReactElement, ReactNode, RefObject } from 'react';
 import { useEvent } from 'react-dom-event';
 import { BoundaryProvider, useBoundary, useRef } from 'react-ref-boundary';
 
@@ -11,7 +11,7 @@ function Component({ children, isActive, setIsActive }) {
       if (!isActive) return;
       for (let i = 0; i < boundary.refs.length; i++) {
         const x = boundary.refs[i] as RefObject<HTMLElement>;
-        if (x.current && x.current.contains(event.target)) return;
+        if (x.current?.contains(event.target)) return;
       }
       setIsActive(false);
     },
@@ -23,7 +23,8 @@ function Component({ children, isActive, setIsActive }) {
     null,
     Children.map<ReactNode, ReactNode>(children, (child) =>
       isValidElement(child)
-        ? cloneElement(child as ReactElement<any>, {
+        ? // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+          cloneElement(child as ReactElement<any>, {
             isActive,
             setIsActive,
             ref,

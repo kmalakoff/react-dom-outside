@@ -1,0 +1,49 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/Users/kevin/.nvu/installed/v6.17.1/bin/node',
+1 verbose cli   '/Users/kevin/.nvu/installed/v6.17.1/bin/npm',
+1 verbose cli   'run',
+1 verbose cli   'test:node' ]
+2 info using npm@3.10.10
+3 info using node@v6.17.1
+4 verbose run-script [ 'pretest:node', 'test:node', 'posttest:node' ]
+5 info lifecycle react-dom-outside@0.1.2~pretest:node: react-dom-outside@0.1.2
+6 silly lifecycle react-dom-outside@0.1.2~pretest:node: no script for pretest:node, continuing
+7 info lifecycle react-dom-outside@0.1.2~test:node: react-dom-outside@0.1.2
+8 verbose lifecycle react-dom-outside@0.1.2~test:node: unsafe-perm in lifecycle true
+9 verbose lifecycle react-dom-outside@0.1.2~test:node: PATH: /Users/kevin/.nvu/installed/v6.17.1/lib/node_modules/npm/bin/node-gyp-bin:/Users/kevin/Dev/OpenSource/@react-contains/react-dom-outside/node_modules/.bin:/Users/kevin/.nvu/installed/v6.17.1/bin:/Users/kevin/Dev/OpenSource/@react-contains/react-dom-outside/node_modules/.bin:/Users/kevin/Dev/OpenSource/@react-contains/node_modules/.bin:/Users/kevin/Dev/OpenSource/node_modules/.bin:/Users/kevin/Dev/node_modules/.bin:/Users/kevin/node_modules/.bin:/Users/node_modules/.bin:/node_modules/.bin:/Users/kevin/.nvm/versions/node/v20.10.0/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/usr/local/opt/llvm/bin:/usr/local/opt/python/libexec/bin:/usr/local/opt/llvm/bin:/Users/kevin/.gem/bin:/Users/kevin/Library/pnpm:/Users/kevin/.deno/bin:/usr/local/opt/llvm/bin:/usr/local/opt/ruby/bin:/usr/local/opt/llvm@10/bin:/usr/local/opt/llvm/bin:/usr/local/opt/openssl@1.1/bin:/Library/Frameworks/Python.framework/Versions/2.7/bin:/Users/kevin/.nvm/versions/node/v20.10.0/bin:./node_modules/.bin:/Users/kevin/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/VMware Fusion.app/Contents/Public:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Apple/usr/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Users/kevin/Library/Android/sdk/platform-tools:/Users/kevin/Library/Android/sdk/emulator:/Users/kevin/Library/Android/sdk/platform-tools:/Users/kevin/Library/Android/sdk/tools:/Users/kevin/Library/Android/sdk/tools/bin:/Users/kevin/.gem/ruby/2.6.0/bin
+10 verbose lifecycle react-dom-outside@0.1.2~test:node: CWD: /Users/kevin/Dev/OpenSource/@react-contains/react-dom-outside
+11 silly lifecycle react-dom-outside@0.1.2~test:node: Args: [ '-c',
+11 silly lifecycle   'tsds link && tsx node_modules/.bin/mocha test/**/*.tsx' ]
+12 silly lifecycle react-dom-outside@0.1.2~test:node: Returned: code: 1  signal: null
+13 info lifecycle react-dom-outside@0.1.2~test:node: Failed to exec test:node script
+14 verbose stack Error: react-dom-outside@0.1.2 test:node: `tsds link && tsx node_modules/.bin/mocha test/**/*.tsx`
+14 verbose stack Exit status 1
+14 verbose stack     at EventEmitter.<anonymous> (/Users/kevin/.nvu/installed/v6.17.1/lib/node_modules/npm/lib/utils/lifecycle.js:255:16)
+14 verbose stack     at emitTwo (events.js:106:13)
+14 verbose stack     at EventEmitter.emit (events.js:191:7)
+14 verbose stack     at ChildProcess.<anonymous> (/Users/kevin/.nvu/installed/v6.17.1/lib/node_modules/npm/lib/utils/spawn.js:40:14)
+14 verbose stack     at emitTwo (events.js:106:13)
+14 verbose stack     at ChildProcess.emit (events.js:191:7)
+14 verbose stack     at maybeClose (internal/child_process.js:920:16)
+14 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:230:5)
+15 verbose pkgid react-dom-outside@0.1.2
+16 verbose cwd /Users/kevin/Dev/OpenSource/@react-contains/react-dom-outside
+17 error Darwin 21.6.0
+18 error argv "/Users/kevin/.nvu/installed/v6.17.1/bin/node" "/Users/kevin/.nvu/installed/v6.17.1/bin/npm" "run" "test:node"
+19 error node v6.17.1
+20 error npm  v3.10.10
+21 error code ELIFECYCLE
+22 error react-dom-outside@0.1.2 test:node: `tsds link && tsx node_modules/.bin/mocha test/**/*.tsx`
+22 error Exit status 1
+23 error Failed at the react-dom-outside@0.1.2 test:node script 'tsds link && tsx node_modules/.bin/mocha test/**/*.tsx'.
+23 error Make sure you have the latest version of node.js and npm installed.
+23 error If you do, this is most likely a problem with the react-dom-outside package,
+23 error not with npm itself.
+23 error Tell the author that this fails on your system:
+23 error     tsds link && tsx node_modules/.bin/mocha test/**/*.tsx
+23 error You can get information on how to open an issue for this project with:
+23 error     npm bugs react-dom-outside
+23 error Or if that isn't available, you can get their info via:
+23 error     npm owner ls react-dom-outside
+23 error There is likely additional logging output above.
+24 verbose exit [ 1, true ]
