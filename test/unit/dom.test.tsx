@@ -58,8 +58,8 @@ describe('react-dom', () => {
             </Active>
           </EventProvider>
           <button type="button" id="outside" />
-        </Fragment>,
-      ),
+        </Fragment>
+      )
     );
 
     // inside
@@ -93,7 +93,7 @@ describe('react-dom', () => {
             event.stopPropagation();
           }}
         />,
-        el.current,
+        el.current
       );
     }
 
@@ -126,8 +126,8 @@ describe('react-dom', () => {
               event.stopPropagation();
             }}
           />
-        </Fragment>,
-      ),
+        </Fragment>
+      )
     );
 
     // inside
