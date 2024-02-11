@@ -18,8 +18,9 @@ function Component(param) {
     (0, _reactDomEvent.useEvent)(function(event) {
         if (!isActive) return;
         for(var i = 0; i < boundary.refs.length; i++){
+            var ref;
             var x = boundary.refs[i];
-            if (x.current && x.current.contains(event.target)) return;
+            if ((ref = x.current) === null || ref === void 0 ? void 0 : ref.contains(event.target)) return;
         }
         setIsActive(false);
     }, [

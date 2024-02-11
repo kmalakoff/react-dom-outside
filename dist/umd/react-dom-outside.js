@@ -11,8 +11,9 @@
       reactDomEvent.useEvent(function(event) {
           if (!isActive) return;
           for(var i = 0; i < boundary.refs.length; i++){
+              var ref;
               var x = boundary.refs[i];
-              if (x.current && x.current.contains(event.target)) return;
+              if ((ref = x.current) === null || ref === void 0 ? void 0 : ref.contains(event.target)) return;
           }
           setIsActive(false);
       }, [
@@ -45,8 +46,9 @@
       var setIsActive = state[1];
       var ref = react.useRef(null);
       reactDomEvent.useEvent(function(event) {
+          var ref1;
           if (!isActive) return;
-          if (ref.current && ref.current.contains(event.target)) return;
+          if ((ref1 = ref.current) === null || ref1 === void 0 ? void 0 : ref1.contains(event.target)) return;
           setIsActive(false);
       }, [
           isActive,

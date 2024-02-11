@@ -17,8 +17,9 @@ function Active(param) {
     var setIsActive = state[1];
     var ref = (0, _react.useRef)(null);
     (0, _reactDomEvent.useEvent)(function(event) {
+        var ref1;
         if (!isActive) return;
-        if (ref.current && ref.current.contains(event.target)) return;
+        if ((ref1 = ref.current) === null || ref1 === void 0 ? void 0 : ref1.contains(event.target)) return;
         setIsActive(false);
     }, [
         isActive,

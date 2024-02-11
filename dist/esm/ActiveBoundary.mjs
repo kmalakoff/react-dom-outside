@@ -1,4 +1,4 @@
-import { useState, Fragment, Children, isValidElement, cloneElement, createElement } from 'react';
+import { Children, Fragment, cloneElement, createElement, isValidElement, useState } from 'react';
 import { useEvent } from 'react-dom-event';
 import { BoundaryProvider, useBoundary, useRef } from 'react-ref-boundary';
 function Component({ children , isActive , setIsActive  }) {
@@ -8,7 +8,7 @@ function Component({ children , isActive , setIsActive  }) {
         if (!isActive) return;
         for(let i = 0; i < boundary.refs.length; i++){
             const x = boundary.refs[i];
-            if (x.current && x.current.contains(event.target)) return;
+            if (x.current?.contains(event.target)) return;
         }
         setIsActive(false);
     }, [
