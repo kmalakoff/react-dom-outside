@@ -9,13 +9,13 @@ Object.defineProperty(exports, "default", {
     }
 });
 var _react = require("react");
-var _reactDomEvent = require("react-dom-event");
-var _reactRefBoundary = require("react-ref-boundary");
+var _reactdomevent = require("react-dom-event");
+var _reactrefboundary = require("react-ref-boundary");
 function Component(param) {
     var children = param.children, isActive = param.isActive, setIsActive = param.setIsActive;
-    var ref = (0, _reactRefBoundary.useRef)(null);
-    var boundary = (0, _reactRefBoundary.useBoundary)();
-    (0, _reactDomEvent.useEvent)(function(event) {
+    var ref = (0, _reactrefboundary.useRef)(null);
+    var boundary = (0, _reactrefboundary.useBoundary)();
+    (0, _reactdomevent.useEvent)(function(event) {
         if (!isActive) return;
         for(var i = 0; i < boundary.refs.length; i++){
             var x = boundary.refs[i];
@@ -39,7 +39,7 @@ function ActiveBoundary(param) {
     var state = (0, _react.useState)(false);
     var isActive = state[0];
     var setIsActive = state[1];
-    return (0, _react.createElement)(_reactRefBoundary.BoundaryProvider, null, (0, _react.createElement)(Component, {
+    return (0, _react.createElement)(_reactrefboundary.BoundaryProvider, null, (0, _react.createElement)(Component, {
         isActive: isActive,
         setIsActive: setIsActive
     }, children));

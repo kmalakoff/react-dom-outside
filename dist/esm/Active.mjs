@@ -1,6 +1,6 @@
-import { useState, useRef, Fragment, Children, isValidElement, cloneElement, createElement } from 'react';
+import { Children, Fragment, cloneElement, createElement, isValidElement, useRef, useState } from 'react';
 import { useEvent } from 'react-dom-event';
-export default function Active({ children  }) {
+export default function Active({ children }) {
     const state = useState(false);
     const isActive = state[0];
     const setIsActive = state[1];
@@ -18,4 +18,4 @@ export default function Active({ children  }) {
             setIsActive,
             ref
         }) : child));
-};
+}

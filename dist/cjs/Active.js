@@ -9,14 +9,14 @@ Object.defineProperty(exports, "default", {
     }
 });
 var _react = require("react");
-var _reactDomEvent = require("react-dom-event");
+var _reactdomevent = require("react-dom-event");
 function Active(param) {
     var children = param.children;
     var state = (0, _react.useState)(false);
     var isActive = state[0];
     var setIsActive = state[1];
     var ref = (0, _react.useRef)(null);
-    (0, _reactDomEvent.useEvent)(function(event) {
+    (0, _reactdomevent.useEvent)(function(event) {
         if (!isActive) return;
         if (ref.current && ref.current.contains(event.target)) return;
         setIsActive(false);
