@@ -1,7 +1,7 @@
-import { useState, Fragment, Children, isValidElement, cloneElement, createElement } from 'react';
+import { Children, Fragment, cloneElement, createElement, isValidElement, useState } from 'react';
 import { useEvent } from 'react-dom-event';
 import { BoundaryProvider, useBoundary, useRef } from 'react-ref-boundary';
-function Component({ children , isActive , setIsActive  }) {
+function Component({ children, isActive, setIsActive }) {
     const ref = useRef(null);
     const boundary = useBoundary();
     useEvent((event)=>{
@@ -21,7 +21,7 @@ function Component({ children , isActive , setIsActive  }) {
             ref
         }) : child));
 }
-export default function ActiveBoundary({ children  }) {
+export default function ActiveBoundary({ children }) {
     const state = useState(false);
     const isActive = state[0];
     const setIsActive = state[1];
@@ -29,4 +29,4 @@ export default function ActiveBoundary({ children  }) {
         isActive,
         setIsActive
     }, children));
-};
+}

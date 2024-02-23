@@ -34,25 +34,27 @@
   "scripts": {
     "build": "tsds build",
     "deploy": "tsds deploy",
-    "format": "tsds format",
-    "lint": "tsds lint",
-    "test": "tsds test:browser",
-    "testworkaround": "tsds test:node && tsds test:browser",
-    "test:engines": "nvu engines tsds test:node && tsds test:browser",
+    "format": "biome check --apply-unsafe src/ test/",
+    "test": "tsds link && npm run test:node && tsds test:browser  && tsds unlink",
+    "test:engines": "tsds link && nvu engines npm run test:node && tsds test:browser && tsds unlink",
+    "test:node": "tsx node_modules/.bin/mocha --watch-extensions ts,tsx test/**/*.*",
     "version": "tsds version"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.5.3",
     "@types/mocha": "^10.0.6",
-    "@types/node": "^20.11.17",
-    "@types/react": "18.2.55",
+    "@types/node": "^20.11.20",
+    "@types/react": "^18.2.57",
     "@types/react-dom": "^18.2.19",
-    "jsdom": "^9.12.0",
-    "react": "18.2.x",
-    "react-dom": "18.2.x",
+    "jsdom": "9.12.0",
+    "mocha": "^10.3.0",
+    "react": "^18.2.x",
+    "react-dom": "^18.2.x",
     "react-dom-event": "^0.1.2",
-    "react-native-web": "0.18.4",
+    "react-native-web": "^0.19.10",
     "react-ref-boundary": "^0.1.2",
-    "ts-dev-stack": "^0.8.12"
+    "ts-dev-stack": "^0.15.5",
+    "tsx": "^4.7.1"
   },
   "peerDependencies": {
     "react": "*"
@@ -62,7 +64,7 @@
     "react-ref-boundary": "*"
   },
   "engines": {
-    "node": ">=4"
+    "node": ">=14"
   },
   "tsds": {
     "source": "src/index.ts",
