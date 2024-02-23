@@ -3,53 +3,52 @@ import '../lib/pollyfills.cjs';
 
 import assert from 'assert';
 import React from 'react';
-import { useEffect, forwardRef, Fragment } from 'react';
-import { Dispatch, SetStateAction, RefObject } from 'react';
+import { Fragment, forwardRef, useEffect } from 'react';
+import { Dispatch, RefObject, SetStateAction } from 'react';
 import { createPortal } from 'react-dom';
-import { createRoot, Root } from 'react-dom/client';
+import { Root, createRoot } from 'react-dom/client';
 import { act } from 'react-dom/test-utils';
 
-import { View, Text } from 'react-native-web';
-import { Active, ActiveBoundary } from 'react-dom-outside';
 import { EventProvider } from 'react-dom-event';
+import { Text, View } from 'react-native-web';
 import { useRef } from 'react-ref-boundary';
+// @ts-ignore
+import { Active, ActiveBoundary } from 'react-dom-outside';
 import getByTestId from '../lib/getByTestId';
 
-describe('react-native-web', function () {
+describe('react-native-web', () => {
   let container: HTMLDivElement | null = null;
   let root: Root | null = null;
-  beforeEach(function () {
+  beforeEach(() => {
     container = document.createElement('div');
     document.body.appendChild(container);
     root = createRoot(container);
   });
 
-  afterEach(function () {
+  afterEach(() => {
     act(() => root.unmount());
     root = null;
     container.remove();
     container = null;
   });
 
-  it('Active', function () {
+  it('Active', () => {
     type ComponentProps = {
       isActive?: boolean | undefined;
       setIsActive?: Dispatch<SetStateAction<boolean>>;
     };
 
-    const Component = forwardRef(function ({ isActive, setIsActive }: ComponentProps, ref: RefObject<View>) {
-      return (
-        <View ref={ref}>
-          <Text testID="text">{isActive ? 'active' : 'not active'}</Text>
-          <View
-            testID="toggle"
-            onClick={function () {
-              setIsActive(!isActive);
-            }}
-          />
-        </View>
-      );
-    });
+    const Component = forwardRef(({ isActive, setIsActive }: ComponentProps, ref: RefObject<View>) => (
+      <View ref={ref}>
+        <Text testID="text">{isActive ? 'active' : 'not active'}</Text>
+        <View
+          testID="toggle"
+          onClick={() => {
+            setIsActive(!isActive);
+          }}
+        />
+      </View>
+    ));
 
     act(() =>
       root.render(
@@ -74,7 +73,7 @@ describe('react-native-web', function () {
     assert.equal(getByTestId(container, 'text').innerHTML, 'not active');
   });
 
-  it('ActiveBoundary', function () {
+  it('ActiveBoundary', () => {
     type ComponentProps = {
       isActive?: boolean | undefined;
       setIsActive?: Dispatch<SetStateAction<boolean>>;
@@ -83,14 +82,14 @@ describe('react-native-web', function () {
     function PortalComponent() {
       const ref = useRef(null);
       const el = useRef(document.createElement('View'));
-      useEffect(function () {
+      useEffect(() => {
         container.appendChild(el.current);
       });
       return createPortal(
         <View
           ref={ref}
           testID="portal-click"
-          onClick={function (event) {
+          onClick={(event) => {
             event.stopPropagation();
           }}
         />,
@@ -98,20 +97,18 @@ describe('react-native-web', function () {
       );
     }
 
-    const Component = forwardRef(function ({ isActive, setIsActive }: ComponentProps, ref: RefObject<View>) {
-      return (
-        <View ref={ref}>
-          <Text testID="text">{isActive ? 'active' : 'not active'}</Text>
-          <View
-            testID="toggle"
-            onClick={function () {
-              setIsActive(!isActive);
-            }}
-          />
-          <PortalComponent />
-        </View>
-      );
-    });
+    const Component = forwardRef(({ isActive, setIsActive }: ComponentProps, ref: RefObject<View>) => (
+      <View ref={ref}>
+        <Text testID="text">{isActive ? 'active' : 'not active'}</Text>
+        <View
+          testID="toggle"
+          onClick={() => {
+            setIsActive(!isActive);
+          }}
+        />
+        <PortalComponent />
+      </View>
+    ));
 
     act(() =>
       root.render(
@@ -123,7 +120,7 @@ describe('react-native-web', function () {
           </EventProvider>
           <View
             testID="outside"
-            onClick={function (event) {
+            onClick={(event) => {
               event.stopPropagation();
             }}
           />
