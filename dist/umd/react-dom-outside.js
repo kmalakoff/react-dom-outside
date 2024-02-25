@@ -64,7 +64,5 @@
   exports.Active = Active;
   exports.ActiveBoundary = ActiveBoundary;
 
-  Object.defineProperty(exports, '__esModule', { value: true });
-
 }));
 //# sourceMappingURL=react-dom-outside.js.map
