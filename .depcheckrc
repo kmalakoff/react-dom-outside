@@ -1,0 +1,1 @@
+ignores: ["react-dom-outside", "depcheck", "ts-dev-stack", "@types/*", "jsdom", "react", "react-*"]
