@@ -5,9 +5,9 @@ import '../lib/polyfills.cjs';
 import assert from 'assert';
 
 import React, { Fragment, forwardRef, useEffect, useRef as useRefReact } from 'react';
-import { Dispatch, RefObject, SetStateAction } from 'react';
+import type { Dispatch, RefObject, SetStateAction } from 'react';
 import { createPortal } from 'react-dom';
-import { Root, createRoot } from 'react-dom/client';
+import { type Root, createRoot } from 'react-dom/client';
 import { act } from 'react-dom/test-utils';
 
 import { EventProvider } from 'react-dom-event';
