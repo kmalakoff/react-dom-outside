@@ -1,13 +1,12 @@
 // @ts-ignore
-global.IS_REACT_ACT_ENVIRONMENT = true;
+(typeof global === 'undefined' ? window : global).IS_REACT_ACT_ENVIRONMENT = true;
 import '../lib/polyfills.cjs';
 
 import assert from 'assert';
-import React, { Fragment, forwardRef, useEffect } from 'react';
-import { Dispatch, RefObject, SetStateAction } from 'react';
-import { createPortal } from 'react-dom';
-import { Root, createRoot } from 'react-dom/client';
-import { act } from 'react-dom/test-utils';
+import React, { Fragment, forwardRef, useEffect, act } from 'react';
+import type { Dispatch, RefObject, SetStateAction } from 'react';
+import * as ReactDOM from 'react-dom';
+import { type Root, createRoot } from 'react-dom/client';
 
 import { EventProvider } from 'react-dom-event';
 // @ts-ignore
@@ -32,7 +31,7 @@ describe('react-native-web', () => {
     container = null;
   });
 
-  it('Active', () => {
+  typeof global === 'undefined' || it('Active', () => {
     type ComponentProps = {
       isActive?: boolean | undefined;
       setIsActive?: Dispatch<SetStateAction<boolean>>;
@@ -73,7 +72,7 @@ describe('react-native-web', () => {
     assert.equal(getByTestId(container, 'text').innerHTML, 'not active');
   });
 
-  it('ActiveBoundary', () => {
+  typeof global === 'undefined' || it('ActiveBoundary', () => {
     type ComponentProps = {
       isActive?: boolean | undefined;
       setIsActive?: Dispatch<SetStateAction<boolean>>;
@@ -85,7 +84,7 @@ describe('react-native-web', () => {
       useEffect(() => {
         container.appendChild(el.current);
       });
-      return createPortal(
+      return ReactDOM.createPortal(
         <View
           ref={ref}
           testID="portal-click"
