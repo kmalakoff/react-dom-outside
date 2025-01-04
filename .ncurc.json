@@ -1,4 +1,4 @@
 {
   "upgrade": true,
-  "reject": ["jsdom"]
+  "reject": ["@types/react", "@types/react-dom", "react", "react-dom"]
 }
