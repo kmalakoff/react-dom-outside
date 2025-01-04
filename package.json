@@ -33,6 +33,7 @@
   ],
   "scripts": {
     "build": "tsds build",
+    "clean": "node -e \"const dir = require('path').join(require('homedir-polyfill')(), '.im'); try {require('fs').rmdirSync(dir, {recursive: true})} catch(err) {}\"",
     "deploy": "tsds deploy",
     "docs": "tsds docs",
     "format": "biome check --write --unsafe src/ test/",
@@ -50,10 +51,10 @@
     "jsdom": "^25.0.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-dom-event": "^0.1.4",
+    "react-dom-event": "^0.1.9",
     "react-native-web": "^0.19.13",
-    "react-ref-boundary": "^0.1.4",
-    "tsds-web-test-runner": "^1.11.15"
+    "react-ref-boundary": "^0.1.9",
+    "tsds-web-test-runner": "^1.11.22"
   },
   "peerDependencies": {
     "react": "*",
