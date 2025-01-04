@@ -1,6 +1,6 @@
 {
   "name": "react-dom-outside",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "React components for react-dom and react-native-web click outside",
   "keywords": [
     "react",
