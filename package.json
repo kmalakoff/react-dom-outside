@@ -19,13 +19,13 @@
   "exports": {
     ".": {
       "import": "./dist/esm/index.mjs",
-      "require": "./dist/cjs/index.js",
+      "require": "./dist/cjs/index.cjs",
       "types": "./dist/types/index.d.ts"
     },
     "./*": "./*"
   },
-  "main": "dist/cjs/index.js",
-  "unpkg": "dist/umd/react-dom-outside.js",
+  "main": "dist/cjs/index.cjs",
+  "unpkg": "dist/umd/react-dom-outside.cjs",
   "module": "dist/esm/index.mjs",
   "types": "dist/types/index.d.ts",
   "files": [
@@ -34,25 +34,26 @@
   "scripts": {
     "build": "tsds build",
     "deploy": "tsds deploy",
-    "format": "biome check --apply-unsafe src/ test/",
-    "test": "tsds test:node && tsds test:browser",
-    "test:engines": "nvu engines tsds test:node && tsds test:browser",
+    "docs": "tsds docs",
+    "format": "biome check --write --unsafe src/ test/",
+    "test": "tsds test:browser --config wtr.config.mjs",
+    "test:engines": "nvu engines npm test",
     "version": "tsds version"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.5.3",
-    "@types/mocha": "^10.0.6",
-    "@types/node": "^20.11.20",
-    "@types/react": "^18.2.58",
-    "@types/react-dom": "^18.2.19",
-    "jsdom": "9.12.0",
-    "mocha": "^10.3.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "@biomejs/biome": "^1.9.4",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^22.10.5",
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.1",
+    "@web/dev-server-import-maps": "^0.2.1",
+    "jsdom": "^25.0.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-dom-event": "^0.1.4",
-    "react-native-web": "^0.19.10",
+    "react-native-web": "^0.19.13",
     "react-ref-boundary": "^0.1.4",
-    "ts-dev-stack": "^0.15.8"
+    "tsds-web-test-runner": "^1.11.15"
   },
   "peerDependencies": {
     "react": "*",
@@ -60,10 +61,15 @@
     "react-ref-boundary": "*"
   },
   "engines": {
-    "node": ">=14"
+    "node": ">=16"
   },
   "tsds": {
     "source": "src/index.ts",
+    "targets": [
+      "cjs",
+      "esm",
+      "umd"
+    ],
     "globals": {
       "react": "React",
       "react-dom-event": "reactDomEvent",
