@@ -6,7 +6,7 @@ For a react-native version, check out [react-native-outside](https://www.npmjs.c
 
 ### Example 1: Active Component
 
-```jsx
+```tsx
 import { forwardRef } from "react",
 import { dom } from "react-native",
 import { Active } from "react-native-outside";
@@ -42,7 +42,7 @@ export default function App() {
 
 ### Example 1: Active Boundary Component
 
-```jsx
+```tsx
 import { forwardRef, useEffect, useRef } from "react",
 import { Active } from "react-native-outside";
 import { EventProvider } from "react-native-event";
