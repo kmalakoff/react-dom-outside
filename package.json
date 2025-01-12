@@ -48,13 +48,13 @@
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.1",
     "@web/dev-server-import-maps": "^0.2.1",
-    "jsdom": "^25.0.1",
+    "jsdom": "^26.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-dom-event": "^0.1.9",
+    "react-dom-event": "^0.1.10",
     "react-native-web": "^0.19.13",
-    "react-ref-boundary": "^0.1.9",
-    "tsds-web-test-runner": "^1.11.22"
+    "react-ref-boundary": "^0.1.10",
+    "tsds-web-test-runner": "^1.13.6"
   },
   "peerDependencies": {
     "react": "*",
