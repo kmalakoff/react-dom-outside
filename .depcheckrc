@@ -1,1 +1,1 @@
-ignores: ["@types/*", "react-dom-outside", "@biomejs/*", "tsds-web-test-runner", "jsdom", "react", "react-*"]
+ignores: ["react-dom-outside", "tsds-web-test-runner", "jsdom", "react", "react-*"]
