@@ -50,7 +50,6 @@
     "react": "*",
     "react-dom": "*",
     "react-dom-event": "*",
-    "react-native-web": "*",
     "react-ref-boundary": "*",
     "tsds-web-test-runner": "*"
   },
