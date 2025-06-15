@@ -3,7 +3,7 @@
 import '../lib/polyfills.cjs';
 
 import assert from 'assert';
-import React, { Fragment, forwardRef, useEffect, useRef as useRefReact, act } from 'react';
+import React, { Fragment, act, forwardRef, useEffect } from 'react';
 import type { Dispatch, RefObject, SetStateAction } from 'react';
 import * as ReactDOM from 'react-dom';
 import { type Root, createRoot } from 'react-dom/client';
@@ -79,7 +79,7 @@ describe('react-dom', () => {
 
     function PortalComponent() {
       const ref = useRef(null);
-      const el = useRefReact(document.createElement('div'));
+      const el = React.useRef(document.createElement('div'));
       useEffect(() => {
         container.appendChild(el.current);
       });
