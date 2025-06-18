@@ -1,5 +1,5 @@
-import { Children, Fragment, cloneElement, createElement, isValidElement, useRef, useState } from 'react';
-import type { ReactElement, ReactNode } from 'react';
+import type { Attributes, ReactNode } from 'react';
+import { Children, cloneElement, createElement, Fragment, isValidElement, useRef, useState } from 'react';
 import { useEvent } from 'react-dom-event';
 
 export default function Active({ children }) {
@@ -21,12 +21,11 @@ export default function Active({ children }) {
     null,
     Children.map<ReactNode, ReactNode>(children, (child) =>
       isValidElement(child)
-        ? // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-          cloneElement(child as ReactElement<any>, {
+        ? cloneElement(child, {
             isActive,
             setIsActive,
             ref,
-          })
+          } as Attributes)
         : child
     )
   );
