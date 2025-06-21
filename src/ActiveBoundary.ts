@@ -17,7 +17,7 @@ function Component({ children, isActive, setIsActive }: ComponentProps) {
       if (!isActive) return;
       for (let i = 0; i < boundary.refs.length; i++) {
         const x = boundary.refs[i] as RefObject<HTMLElement>;
-        if (x.current && x.current.contains(event.target)) return;
+        if (x.current && x.current.contains(event.target as Node)) return;
       }
       setIsActive(false);
     },
