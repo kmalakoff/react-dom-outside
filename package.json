@@ -12,7 +12,10 @@
     "universal",
     "typescript"
   ],
-  "repository": "kmalakoff/react-dom-outside",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kmalakoff/react-dom-outside.git"
+  },
   "license": "MIT",
   "author": "Kevin Malakoff <kmalakoff@gmail.com> (https://github.com/kmalakoff)",
   "type": "module",
