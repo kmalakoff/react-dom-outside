@@ -12,7 +12,7 @@ export default function Active({ children }: ActiveProps) {
   useEvent(
     (event) => {
       if (!isActive) return;
-      if (ref.current && ref.current.contains(event.target)) return;
+      if (ref.current && ref.current.contains(event.target as Node)) return;
       setIsActive(false);
     },
     [isActive, setIsActive]
