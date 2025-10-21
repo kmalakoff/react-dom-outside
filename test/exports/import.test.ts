@@ -1,5 +1,4 @@
 import assert from 'assert';
-// @ts-ignore
 import { Active, ActiveBoundary } from 'react-dom-outside';
 
 describe('exports .mjs', () => {
