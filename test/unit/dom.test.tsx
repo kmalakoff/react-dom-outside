@@ -1,4 +1,3 @@
-// @ts-ignore
 (typeof global === 'undefined' ? window : global).IS_REACT_ACT_ENVIRONMENT = true;
 import '../lib/polyfills.cjs';
 
@@ -9,7 +8,6 @@ import * as ReactDOM from 'react-dom';
 import { createRoot, type Root } from 'react-dom/client';
 
 import { EventProvider } from 'react-dom-event';
-// @ts-ignore
 import { Active, ActiveBoundary } from 'react-dom-outside';
 import { useRef } from 'react-ref-boundary';
 
