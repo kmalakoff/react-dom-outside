@@ -1,1 +1,1 @@
-ignores: ["node-version-use", "ts-dev-stack", "@biomejs/biome", "react-dom-outside", "tsds-web-test-runner", "jsdom", "react", "react-*"]
+ignores: ["node-version-use", "ts-dev-stack", "react-dom-outside", "tsds-web-test-runner", "jsdom", "react", "react-*"]
