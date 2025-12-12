@@ -52,8 +52,8 @@
     "node-version-use": "^2.1.5",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
-    "react-dom-event": "^1.0.8",
-    "react-ref-boundary": "^1.0.7",
+    "react-dom-event": "^1.0.9",
+    "react-ref-boundary": "^1.0.8",
     "ts-dev-stack": "^1.21.3",
     "tsds-config": "^0.2.1",
     "tsds-web-test-runner": "^1.19.4"
