@@ -1,8 +1,8 @@
-(typeof global === 'undefined' ? window : global).IS_REACT_ACT_ENVIRONMENT = true;
+((typeof global === 'undefined' ? window : global) as unknown as Record<string, unknown>).IS_REACT_ACT_ENVIRONMENT = true;
 import '../lib/polyfills.cjs';
 
 import assert from 'assert';
-import type { Dispatch, RefObject, SetStateAction } from 'react';
+import type { Dispatch, ForwardedRef, SetStateAction } from 'react';
 import React, { act, Fragment, forwardRef, useEffect } from 'react';
 import * as ReactDOM from 'react-dom';
 import { createRoot, type Root } from 'react-dom/client';
@@ -21,9 +21,9 @@ describe('react-dom', () => {
   });
 
   afterEach(() => {
-    act(() => root.unmount());
+    act(() => (root as Root).unmount());
     root = null;
-    container.remove();
+    (container as HTMLDivElement).remove();
     container = null;
   });
 
@@ -33,21 +33,21 @@ describe('react-dom', () => {
       setIsActive?: Dispatch<SetStateAction<boolean>>;
     };
 
-    const Component = forwardRef(({ isActive, setIsActive }: ComponentProps, ref: RefObject<HTMLDivElement>) => (
+    const Component = forwardRef(({ isActive, setIsActive }: ComponentProps, ref: ForwardedRef<HTMLDivElement>) => (
       <div ref={ref}>
         <div id="text">{isActive ? 'active' : 'not active'}</div>
         <button
           type="button"
           id="toggle"
           onClick={() => {
-            setIsActive(!isActive);
+            setIsActive?.(!isActive);
           }}
         />
       </div>
     ));
 
     act(() =>
-      root.render(
+      (root as Root).render(
         <Fragment>
           <EventProvider>
             <Active>
@@ -59,14 +59,15 @@ describe('react-dom', () => {
       )
     );
 
+    const c = container as HTMLDivElement;
     // inside
-    assert.equal(container.querySelector('#text').innerHTML, 'not active');
-    act(() => (container.querySelector('#toggle') as HTMLElement).click());
-    assert.equal(container.querySelector('#text').innerHTML, 'active');
+    assert.equal(c.querySelector('#text')?.innerHTML, 'not active');
+    act(() => (c.querySelector('#toggle') as HTMLElement).click());
+    assert.equal(c.querySelector('#text')?.innerHTML, 'active');
 
     // outside
-    act(() => (container.querySelector('#outside') as HTMLElement).click());
-    assert.equal(container.querySelector('#text').innerHTML, 'not active');
+    act(() => (c.querySelector('#outside') as HTMLElement).click());
+    assert.equal(c.querySelector('#text')?.innerHTML, 'not active');
   });
 
   it('ActiveBoundary', () => {
@@ -79,7 +80,7 @@ describe('react-dom', () => {
       const ref = useRef(null);
       const el = React.useRef(document.createElement('div'));
       useEffect(() => {
-        container.appendChild(el.current);
+        (container as HTMLDivElement).appendChild(el.current);
       });
       return ReactDOM.createPortal(
         <button
@@ -94,14 +95,14 @@ describe('react-dom', () => {
       );
     }
 
-    const Component = forwardRef(({ isActive, setIsActive }: ComponentProps, ref: RefObject<HTMLDivElement>) => (
+    const Component = forwardRef(({ isActive, setIsActive }: ComponentProps, ref: ForwardedRef<HTMLDivElement>) => (
       <div ref={ref}>
         <div id="text">{isActive ? 'active' : 'not active'}</div>
         <button
           type="button"
           id="toggle"
           onClick={() => {
-            setIsActive(!isActive);
+            setIsActive?.(!isActive);
           }}
         />
         <PortalComponent />
@@ -109,7 +110,7 @@ describe('react-dom', () => {
     ));
 
     act(() =>
-      root.render(
+      (root as Root).render(
         <Fragment>
           <EventProvider>
             <ActiveBoundary>
@@ -127,17 +128,18 @@ describe('react-dom', () => {
       )
     );
 
+    const c = container as HTMLDivElement;
     // inside
-    assert.equal(container.querySelector('#text').innerHTML, 'not active');
-    act(() => (container.querySelector('#toggle') as HTMLElement).click());
-    assert.equal(container.querySelector('#text').innerHTML, 'active');
+    assert.equal(c.querySelector('#text')?.innerHTML, 'not active');
+    act(() => (c.querySelector('#toggle') as HTMLElement).click());
+    assert.equal(c.querySelector('#text')?.innerHTML, 'active');
 
     // portal
-    act(() => (container.querySelector('#portal-click') as HTMLElement).click());
-    assert.equal(container.querySelector('#text').innerHTML, 'active');
+    act(() => (c.querySelector('#portal-click') as HTMLElement).click());
+    assert.equal(c.querySelector('#text')?.innerHTML, 'active');
 
     // outside
-    act(() => (container.querySelector('#outside') as HTMLElement).click());
-    assert.equal(container.querySelector('#text').innerHTML, 'not active');
+    act(() => (c.querySelector('#outside') as HTMLElement).click());
+    assert.equal(c.querySelector('#text')?.innerHTML, 'not active');
   });
 });

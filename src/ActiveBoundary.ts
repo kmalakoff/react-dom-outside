@@ -10,7 +10,7 @@ interface ComponentProps {
 }
 
 function Component({ children, isActive, setIsActive }: ComponentProps) {
-  const ref = useRef<HTMLElement>(null);
+  const ref = useRef<HTMLElement | null>(null);
   const boundary = useBoundary();
   useEvent(
     (event) => {
