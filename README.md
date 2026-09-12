@@ -1,37 +1,36 @@
 ## react-dom-outside
 
-React components for react-dom and react-native-web click outside
+React components for detecting clicks outside a component in React DOM and react-native-web applications.
 
-For a react-native version, check out [react-native-outside](https://www.npmjs.com/package/react-native-outside)
+Install the package and its peer dependencies:
 
-### Example 1: Active Component
+```bash
+npm install react react-dom react-dom-outside react-dom-event react-ref-boundary
+```
+
+For a React Native version, see [react-native-outside](https://www.npmjs.com/package/react-native-outside).
+
+### Active component
 
 ```tsx
-import { forwardRef } from "react",
-import { dom } from "react-native",
-import { Active } from "react-native-outside";
-import { EventProvider } from "react-native-event";
+import { forwardRef } from 'react';
+import { EventProvider } from 'react-dom-event';
+import { Active } from 'react-dom-outside';
 
-const Component = forwardRef(({ isActive, setIsActive }, ref) => {
+const Component = forwardRef<HTMLDivElement, { isActive?: boolean; setIsActive?: (value: boolean) => void }>(({ isActive, setIsActive }, ref) => {
   return (
-    <dom ref={ref}>
-      <dom id="text">{isActive ? 'active' : 'not active'}</dom>
-      <button
-        id="toggle"
-        onClick={function () {
-          setIsActive(!isActive);
-        }}
-      />
-    </dom>
+    <div ref={ref}>
+      <div>{isActive ? 'active' : 'not active'}</div>
+      <button type="button" onClick={() => setIsActive?.(!isActive)}>
+        Toggle
+      </button>
+    </div>
   );
 });
 
 export default function App() {
   return (
     <EventProvider>
-      <Active>
-        <Component />
-      </Active>
       <Active>
         <Component />
       </Active>
@@ -40,57 +39,39 @@ export default function App() {
 }
 ```
 
-### Example 1: Active Boundary Component
+`Active` injects `isActive`, `setIsActive`, and a ref into its child. The child must forward that ref to the DOM element that defines its inside area. Clicking outside that element sets `isActive` to `false`.
+
+### Active boundary component
+
+Use `ActiveBoundary` when another DOM element should count as inside the active area. Register that element with `react-ref-boundary`:
 
 ```tsx
-import { forwardRef, useEffect, useRef } from "react",
-import { Active } from "react-native-outside";
-import { EventProvider } from "react-native-event";
-import { PortalProvider, Portal } from '@gorhom/portal';
+import { forwardRef } from 'react';
+import { EventProvider } from 'react-dom-event';
+import { ActiveBoundary } from 'react-dom-outside';
 import { useRef as useBoundaryRef } from 'react-ref-boundary';
 
-// a modal for example outside the hierarchy
-const PortalComponent = () => {
-  const ref = useBoundaryRef(null); // react-ref-boundary ref
-  const el = useRef(document.createElement('div'));
-  useEffect(function () {
-    container.appendChild(el.current);
-  });
-  return ReactDOM.createPortal(
-    <button
-      ref={ref}
-      id="portal-click"
-      OnClick={() => { /* this click will not inactivate due to react-ref-boundary ref */ }}
-    />,
-    el.current,
-  );
-}
+const Component = forwardRef<HTMLDivElement, { isActive?: boolean; setIsActive?: (value: boolean) => void }>(({ isActive, setIsActive }, ref) => (
+  <div ref={ref}>
+    <div>{isActive ? 'active' : 'not active'}</div>
+    <button type="button" onClick={() => setIsActive?.(!isActive)}>
+      Toggle
+    </button>
+  </div>
+));
 
-// react-ref-boundary ref passed in
-const Component = forwardRef(({ isActive, setIsActive }, ref) => {
-  return (
-    <dom ref={ref}>
-      <dom id="text">{isActive ? 'active' : 'not active'}</dom>
-      <button
-        id="toggle"
-        onClick={function () {
-          setIsActive(!isActive);
-        }}
-      />
-      <PortalComponent/>
-    </dom>
-  );
+const AdditionalBoundary = forwardRef<HTMLDivElement>((_props, _ref) => {
+  const ref = useBoundaryRef<HTMLDivElement>(null);
+  return <div ref={ref}>Clicks here remain inside the active boundary.</div>;
 });
 
 export default function App() {
   return (
     <EventProvider>
-      <Active>
+      <ActiveBoundary>
         <Component />
-      </Active>
-      <Active>
-        <Component />
-      </Active>
+        <AdditionalBoundary />
+      </ActiveBoundary>
     </EventProvider>
   );
 }

@@ -1,1 +1,1 @@
-ignores: ["node-version-use", "ts-dev-stack", "react-dom-outside", "tsds-web-test-runner", "jsdom", "react", "react-*"]
+ignores: ["react-dom-outside", "node-version-use", "ts-dev-stack", "tsds-web-test-runner", "jsdom", "react", "react-*"]
