@@ -1,4 +1,5 @@
 ((typeof global === 'undefined' ? window : global) as unknown as Record<string, unknown>).IS_REACT_ACT_ENVIRONMENT = true;
+
 import '../lib/polyfills.cjs';
 
 import assert from 'assert';
@@ -11,7 +12,9 @@ import { EventProvider } from 'react-dom-event';
 import { Active, ActiveBoundary } from 'react-dom-outside';
 import { useRef } from 'react-ref-boundary';
 
-describe('react-dom', () => {
+const suite = typeof document === 'undefined' ? describe.skip : describe;
+
+suite('react-dom', () => {
   let container: HTMLDivElement | null = null;
   let root: Root | null = null;
   beforeEach(() => {
