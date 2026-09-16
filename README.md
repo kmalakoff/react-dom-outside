@@ -15,13 +15,13 @@ For a React Native version, see [react-native-outside](https://www.npmjs.com/pac
 ```tsx
 import { forwardRef } from 'react';
 import { EventProvider } from 'react-dom-event';
-import { Active } from 'react-dom-outside';
+import { Active, type ActiveInjectedProps } from 'react-dom-outside';
 
-const Component = forwardRef<HTMLDivElement, { isActive?: boolean; setIsActive?: (value: boolean) => void }>(({ isActive, setIsActive }, ref) => {
+const Component = forwardRef<HTMLDivElement, Partial<ActiveInjectedProps>>(({ isActive, setIsActive }, ref) => {
   return (
     <div ref={ref}>
       <div>{isActive ? 'active' : 'not active'}</div>
-      <button type="button" onClick={() => setIsActive?.(!isActive)}>
+      <button type="button" onClick={() => setIsActive?.((current) => !current)}>
         Toggle
       </button>
     </div>
@@ -39,7 +39,7 @@ export default function App() {
 }
 ```
 
-`Active` injects `isActive`, `setIsActive`, and a ref into its child. The child must forward that ref to the DOM element that defines its inside area. Clicking outside that element sets `isActive` to `false`.
+`Active` and `ActiveBoundary` require exactly one child, which must forward its ref to the DOM element that defines its inside area. Fragments and multiple children are rejected. Both components preserve the child's existing object or callback ref, including React 19 cleanup callbacks. They inject `isActive` and the React state setter `setIsActive`. Clicking outside sets `isActive` to `false`.
 
 ### Active boundary component
 
@@ -48,29 +48,29 @@ Use `ActiveBoundary` when another DOM element should count as inside the active 
 ```tsx
 import { forwardRef } from 'react';
 import { EventProvider } from 'react-dom-event';
-import { ActiveBoundary } from 'react-dom-outside';
+import { ActiveBoundary, type ActiveInjectedProps } from 'react-dom-outside';
 import { useRef as useBoundaryRef } from 'react-ref-boundary';
 
-const Component = forwardRef<HTMLDivElement, { isActive?: boolean; setIsActive?: (value: boolean) => void }>(({ isActive, setIsActive }, ref) => (
+const Component = forwardRef<HTMLDivElement, Partial<ActiveInjectedProps>>(({ isActive, setIsActive }, ref) => (
   <div ref={ref}>
     <div>{isActive ? 'active' : 'not active'}</div>
-    <button type="button" onClick={() => setIsActive?.(!isActive)}>
+    <button type="button" onClick={() => setIsActive?.((current) => !current)}>
       Toggle
     </button>
+    <AdditionalBoundary />
   </div>
 ));
 
-const AdditionalBoundary = forwardRef<HTMLDivElement>((_props, _ref) => {
+function AdditionalBoundary() {
   const ref = useBoundaryRef<HTMLDivElement>(null);
   return <div ref={ref}>Clicks here remain inside the active boundary.</div>;
-});
+}
 
 export default function App() {
   return (
     <EventProvider>
       <ActiveBoundary>
         <Component />
-        <AdditionalBoundary />
       </ActiveBoundary>
     </EventProvider>
   );

@@ -38,8 +38,9 @@
     "docs": "tsds docs",
     "format": "tsds format",
     "prepublishOnly": "tsds validate",
-    "test": "tsds test:browser --config wtr.config.mjs && tsds test:node --no-timeouts",
-    "test:engines": "tsds test:browser --config wtr.config.mjs && nvu engines tsds test:node --no-timeouts",
+    "test": "npm run test:types && node test/lib/browser.mjs && tsds test:node --no-timeouts --exclude test/exports/umd-browser.test.ts",
+    "test:engines": "node test/lib/browser.mjs && nvu engines tsds test:node --no-timeouts --exclude test/exports/umd-browser.test.ts",
+    "test:types": "npm run build && node test/types/run.mjs",
     "version": "tsds version"
   },
   "devDependencies": {
@@ -48,12 +49,14 @@
     "@types/react": "*",
     "@types/react-dom": "*",
     "@web/dev-server-import-maps": "^0.3.0",
+    "fs-remove-compat": "^1.0.0",
     "jsdom": "^30.0.1",
     "node-version-use": "*",
     "react": "*",
     "react-dom": "*",
     "react-dom-event": "^1.0.10",
     "react-ref-boundary": "^1.0.9",
+    "semver": "^7.8.5",
     "ts-dev-stack": "*",
     "tsds-config": "*",
     "tsds-web-test-runner": "*"

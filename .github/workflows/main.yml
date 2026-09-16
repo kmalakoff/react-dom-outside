@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - master
+  pull_request:
+  workflow_dispatch:
 jobs:
   test:
     name: Node.js ${{ matrix.os }}
@@ -19,6 +21,30 @@ jobs:
       - run: git config --global user.name "Github Actions"
       - run: git config --global user.email "actions@users.noreply.github.com"
       - run: npm ci
+      - uses: actions/checkout@v7
+        with:
+          repository: kmalakoff/react-dom-event
+          ref: bb356041a14dc5f37ddb3549339ad477672c168a
+          path: .tmp/react-dom-event
+      - uses: actions/checkout@v7
+        with:
+          repository: kmalakoff/react-ref-boundary
+          ref: 4642641ace59f315f81115829eca2659ff5ce106
+          path: .tmp/react-ref-boundary
+      - run: npm ci
+        working-directory: .tmp/react-dom-event
+      - run: npm run build
+        working-directory: .tmp/react-dom-event
+      - run: npm pack --ignore-scripts --pack-destination ..
+        working-directory: .tmp/react-dom-event
+      - run: npm ci
+        working-directory: .tmp/react-ref-boundary
+      - run: npm run build
+        working-directory: .tmp/react-ref-boundary
+      - run: npm pack --ignore-scripts --pack-destination ..
+        working-directory: .tmp/react-ref-boundary
+      - name: Install reviewed sibling candidates
+        run: npm install --ignore-scripts --no-save --package-lock=false ./.tmp/react-dom-event-1.0.15.tgz ./.tmp/react-ref-boundary-1.0.14.tgz
       - run: npx -y playwright install --with-deps
       - run: npm run prepublishOnly
       - run: npm run test
