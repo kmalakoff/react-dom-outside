@@ -10,6 +10,8 @@ Use Node 26 for development tooling. Each browser profile installs its own lockf
 
 Routine browser endpoints pin React and ReactDOM together at 16.8.0 and 19.3.0. All profiles use the same behavioral assertions. React 16/17 use legacy mounting; React 18/19 use createRoot. Local bundled bridges keep one React instance and avoid CDN conversion.
 
+The React 16.8 profile supports synchronous `act` callbacks only, and the current tests use synchronous callbacks. Async callbacks require a React version with async `act` support and are not covered by this matrix.
+
 The Node 16 check loads the packed ESM, CommonJS and UMD entries. It does not certify SSR or component rendering in Node.
 
 Outside integration must use the reviewed sibling candidates. The CI workflow checks out pinned sibling commits, builds tarballs, and installs those artifacts before validation. A same-version registry package may not contain those changes; ordinary npm ci alone does not prepare the coordinated candidate set. Preserve or reproduce the candidate installation steps from [.github/workflows/main.yml](../.github/workflows/main.yml) for local integration runs.\n\n
