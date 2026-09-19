@@ -45,7 +45,7 @@ jobs:
         working-directory: .tmp/react-ref-boundary
       - name: Install reviewed sibling candidates
         run: npm install --ignore-scripts --no-save --package-lock=false ./.tmp/react-dom-event-1.0.15.tgz ./.tmp/react-ref-boundary-1.0.14.tgz
-      - run: npx -y playwright install --with-deps
+      - run: npx -y playwright install --with-deps chromium
       - run: npm run prepublishOnly
       - run: npm run test
       - run: npm run test:engines
