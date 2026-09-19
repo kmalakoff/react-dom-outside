@@ -14,4 +14,4 @@ The React 16.8 profile supports synchronous `act` callbacks only, and the curren
 
 The Node 16 check loads the packed ESM, CommonJS and UMD entries. It does not certify SSR or component rendering in Node.
 
-Outside integration must use the reviewed sibling candidates. The CI workflow checks out pinned sibling commits, builds tarballs, and installs those artifacts before validation. A same-version registry package may not contain those changes; ordinary npm ci alone does not prepare the coordinated candidate set. Preserve or reproduce the candidate installation steps from [.github/workflows/main.yml](../.github/workflows/main.yml) for local integration runs.\n\n
+Outside integration must use the reviewed sibling candidates. The CI workflow checks out pinned sibling commits, builds tarballs, and installs those artifacts before validation. A same-version registry package may not contain those changes; ordinary npm ci alone does not prepare the coordinated candidate set. Preserve or reproduce the candidate installation steps from [.github/workflows/main.yml](../.github/workflows/main.yml) for local integration runs.
