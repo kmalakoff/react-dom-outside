@@ -1,7 +1,9 @@
-import { Children, cloneElement, Fragment, useRef, useState } from 'react';
+import React from 'react';
 import { useEvent } from 'react-dom-event';
 import { getElementRef, useComposedRefs } from './lib/composeRefs.ts';
 import type { ActiveChildProps, ActiveProps } from './types.ts';
+
+const { Children, cloneElement, Fragment, useRef, useState } = React;
 
 export default function Active({ children }: ActiveProps) {
   const child = Children.only(children);

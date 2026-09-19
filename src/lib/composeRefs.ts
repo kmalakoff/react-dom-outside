@@ -1,5 +1,7 @@
 import type { ReactElement, Ref, RefCallback } from 'react';
-import React, { useCallback, useRef } from 'react';
+import React from 'react';
+
+const { useCallback, useRef } = React;
 
 type RefCleanup = () => void;
 

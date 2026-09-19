@@ -1,21 +1,21 @@
 import { importMapsPlugin } from '@web/dev-server-import-maps';
 import createConfig from 'tsds-web-test-runner/createConfig.mjs';
+import { prepareReactProfile } from './test/lib/local-react-bundle.mjs';
 
-const reactVersion = process.env.REACT_TEST_VERSION || '19.3.0';
+const profile = process.env.REACT_TEST_PROFILE || 'current';
+if (profile !== 'minimum' && profile !== 'current') throw new Error(`Unknown React browser profile: ${profile}`);
 
-export default createConfig({
-  port: 9009,
-  plugins: [
-    importMapsPlugin({
-      inject: {
-        importMap: {
-          imports: {
-            react: `https://esm.sh/react@${reactVersion}?dev`,
-            'react-dom': `https://esm.sh/react-dom@${reactVersion}?dev`,
-            'react-dom/client': `https://esm.sh/react-dom@${reactVersion}/client.js?dev`,
-          },
-        },
-      },
-    }),
-  ],
+const config = createConfig({
+  hostname: 'localhost',
+  port: profile === 'minimum' ? 9024 : 9025,
+  nodeResolve: {
+    modulePaths: [`${process.cwd()}/test/browser/${profile}/node_modules`],
+  },
 });
+const localProfile = await prepareReactProfile(profile);
+
+config.plugins = config.plugins.filter((plugin) => plugin.name !== 'import-map');
+config.plugins.push(importMapsPlugin({ inject: { importMap: localProfile } }));
+config.browsers = [config.browsers[0]];
+
+export default config;

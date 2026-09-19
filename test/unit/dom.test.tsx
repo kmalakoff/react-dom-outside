@@ -1,16 +1,13 @@
-import '../lib/polyfills.cjs';
-
 import assert from 'assert';
 import type { Ref } from 'react';
-import React, { act, Fragment, forwardRef, useState } from 'react';
+import React, { Fragment, forwardRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { createRoot, type Root } from 'react-dom/client';
 import { EventProvider } from 'react-dom-event';
 import { Active, ActiveBoundary, type ActiveInjectedProps, type ActiveProps } from 'react-dom-outside';
 import { useBoundary, useRef as useBoundaryRef } from 'react-ref-boundary';
+import { act, type MountedRoot, mount } from '../lib/react-dom.tsx';
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
-const suite = typeof document === 'undefined' ? describe.skip : describe;
 const Child = forwardRef<HTMLDivElement, Partial<ActiveInjectedProps> & { name?: string }>(({ isActive, setIsActive, name = 'one' }, ref) => (
   <div ref={ref} data-child={name}>
     <span data-status={name}>{isActive ? 'active' : 'inactive'}</span>
@@ -20,13 +17,13 @@ const Child = forwardRef<HTMLDivElement, Partial<ActiveInjectedProps> & { name?:
   </div>
 ));
 
-suite('react-dom', () => {
+describe('react-dom', () => {
   let container: HTMLDivElement;
-  let root: Root | undefined;
+  let root: MountedRoot | undefined;
   beforeEach(() => {
     container = document.createElement('div');
     document.body.appendChild(container);
-    root = createRoot(container);
+    root = mount(container);
   });
   afterEach(() => {
     if (root) act(() => root?.unmount());

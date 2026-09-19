@@ -1,5 +1,5 @@
 import type { Dispatch, SetStateAction } from 'react';
-import { createRef, forwardRef } from 'react';
+import React, { createRef, forwardRef } from 'react';
 import { EventProvider } from 'react-dom-event';
 import { Active, ActiveBoundary, type ActiveInjectedProps } from 'react-dom-outside';
 

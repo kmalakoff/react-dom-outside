@@ -1,9 +1,11 @@
 import type { Dispatch, ReactElement, SetStateAction } from 'react';
-import { Children, cloneElement, createElement, Fragment, useState } from 'react';
+import React from 'react';
 import { useEvent } from 'react-dom-event';
 import { BoundaryProvider, useBoundary, useRef as useBoundaryRef } from 'react-ref-boundary';
 import { getElementRef, useComposedRefs } from './lib/composeRefs.ts';
 import type { ActiveBoundaryProps, ActiveChildProps } from './types.ts';
+
+const { Children, cloneElement, createElement, Fragment, useState } = React;
 
 interface ComponentProps {
   child: ReactElement<ActiveChildProps>;

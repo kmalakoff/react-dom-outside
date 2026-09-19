@@ -24,12 +24,12 @@ jobs:
       - uses: actions/checkout@v7
         with:
           repository: kmalakoff/react-dom-event
-          ref: bb356041a14dc5f37ddb3549339ad477672c168a
+          ref: 3d87f2dc7e5b8a880d45f3d15d0796ec19a72a7c
           path: .tmp/react-dom-event
       - uses: actions/checkout@v7
         with:
           repository: kmalakoff/react-ref-boundary
-          ref: 4642641ace59f315f81115829eca2659ff5ce106
+          ref: e3b18914c5bca416186dc52a714fc865ce264e2b
           path: .tmp/react-ref-boundary
       - run: npm ci
         working-directory: .tmp/react-dom-event
