@@ -1,0 +1,17 @@
+# Compatibility tests
+
+Use Node 26 for development tooling. Each browser profile installs its own lockfile with npm ci and uses one current Chromium through WTR. The profiles vary React dependencies, not browser versions.
+
+| Command | Coverage |
+| --- | --- |
+| `npm test` | Isolated consumer types, minimum/current browser assertions, then Node helper/export checks |
+| `npm run test:engines` | Already-built package smoke checks on exact Node 16.0.0; no DOM or renderer on old Node |
+| `npm run test:browser:checkpoints` | Optional React/ReactDOM 17.0.2 and 18.3.1 checks for compatibility-sensitive changes or releases |
+
+Routine browser endpoints pin React and ReactDOM together at 16.8.0 and 19.3.0. All profiles use the same behavioral assertions. React 16/17 use legacy mounting; React 18/19 use createRoot. Local bundled bridges keep one React instance and avoid CDN conversion.
+
+The React 16.8 profile supports synchronous `act` callbacks only, and the current tests use synchronous callbacks. Async callbacks require a React version with async `act` support and are not covered by this matrix.
+
+The Node 16 check loads the packed ESM, CommonJS and UMD entries. It does not certify SSR or component rendering in Node.
+
+Outside integration must use the reviewed sibling candidates. The CI workflow checks out pinned sibling commits, builds tarballs, and installs those artifacts before validation. A same-version registry package may not contain those changes; ordinary npm ci alone does not prepare the coordinated candidate set. Preserve or reproduce the candidate installation steps from [.github/workflows/main.yml](../.github/workflows/main.yml) for local integration runs.

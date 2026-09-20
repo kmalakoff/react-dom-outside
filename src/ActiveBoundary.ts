@@ -1,50 +1,51 @@
-import type { Attributes, Dispatch, FC, ReactNode, RefObject } from 'react';
-import { Children, cloneElement, createElement, Fragment, isValidElement, useState } from 'react';
+import type { Dispatch, ReactElement, SetStateAction } from 'react';
+import React from 'react';
 import { useEvent } from 'react-dom-event';
-import { BoundaryProvider, useBoundary, useRef } from 'react-ref-boundary';
+import { BoundaryProvider, useBoundary, useRef as useBoundaryRef } from 'react-ref-boundary';
+import { getElementRef, useComposedRefs } from './lib/composeRefs.ts';
+import type { ActiveBoundaryProps, ActiveChildProps } from './types.ts';
+
+const { Children, cloneElement, createElement, Fragment, useState } = React;
 
 interface ComponentProps {
-  children?: React.ReactNode;
+  child: ReactElement<ActiveChildProps>;
   isActive: boolean;
-  setIsActive: Dispatch<boolean>;
+  setIsActive: Dispatch<SetStateAction<boolean>>;
 }
 
-function Component({ children, isActive, setIsActive }: ComponentProps) {
-  const ref = useRef<HTMLElement | null>(null);
+function Component({ child, isActive, setIsActive }: ComponentProps) {
+  const ref = useBoundaryRef<HTMLElement | null>(null);
+  const childRef = getElementRef<HTMLElement>(child);
+  const composedRef = useComposedRefs(childRef, ref);
   const boundary = useBoundary();
   useEvent(
     (event) => {
       if (!isActive) return;
       for (let i = 0; i < boundary.refs.length; i++) {
-        const x = boundary.refs[i] as RefObject<HTMLElement>;
-        if (x.current && x.current.contains(event.target as Node)) return;
+        const x = boundary.refs[i];
+        if (typeof x === 'object' && x !== null && 'current' in x) {
+          const current = x.current;
+          if (current && typeof current === 'object' && 'contains' in current && typeof current.contains === 'function' && current.contains(event.target)) return;
+        }
       }
       setIsActive(false);
     },
     [isActive, setIsActive]
   );
 
-  return createElement(
-    Fragment,
-    null,
-    Children.map<ReactNode, ReactNode>(children, (child) =>
-      isValidElement(child)
-        ? cloneElement(child, {
-            isActive,
-            setIsActive,
-            ref,
-          } as Attributes)
-        : child
-    )
-  );
+  const injectedProps: Partial<ActiveChildProps> = { isActive, setIsActive, ref: composedRef };
+  return cloneElement(child, injectedProps);
 }
 
-import type { ActiveBoundaryProps } from './types.ts';
-
 export default function ActiveBoundary({ children }: ActiveBoundaryProps) {
+  const child = Children.only(children);
+  if ((child.type as unknown) === Fragment) {
+    throw new Error('ActiveBoundary requires one non-Fragment child that forwards its ref');
+  }
+
   const state = useState<boolean>(false);
   const isActive = state[0];
   const setIsActive = state[1];
 
-  return createElement(BoundaryProvider, null, createElement<ComponentProps>(Component as FC, { isActive, setIsActive }, children));
+  return createElement(BoundaryProvider, null, createElement<ComponentProps>(Component, { child, isActive, setIsActive }));
 }
