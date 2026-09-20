@@ -1,0 +1,8 @@
+{
+  "name": "react-dom-outside-node-floor",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "react": "16.8.0"
+  }
+}
